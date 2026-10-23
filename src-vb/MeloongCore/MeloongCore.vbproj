@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D1BEA845-B43B-4817-B007-68848C55B87E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MeloongCore</RootNamespace>
+    <AssemblyName>MeloongCore</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkIdentifier>.NETStandard</TargetFrameworkIdentifier>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Win32.Registry" />
+    <Reference Include="netstandard" />
+    <Reference Include="Newtonsoft.Json" />
+    <Reference Include="ThrottleDebounce" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="My Project\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="--z__ReadOnlyArray.vb" />
+    <Compile Include="--z__ReadOnlySingleElementList.vb" />
+    <Compile Include="BaseLogger.vb" />
+    <Compile Include="ConcurrentList.vb" />
+    <Compile Include="ConfigEntry.vb" />
+    <Compile Include="ConfigProviders.vb" />
+    <Compile Include="ConfigUtils.vb" />
+    <Compile Include="CryptographyUtils.vb" />
+    <Compile Include="DirectoryUtils.vb" />
+    <Compile Include="DynamicConfigEntry.vb" />
+    <Compile Include="EnumUtils.vb" />
+    <Compile Include="Extensions\EnumerableExtensions.vb" />
+    <Compile Include="Extensions\ExceptionExtensions.vb" />
+    <Compile Include="Extensions\StringExtensions.vb" />
+    <Compile Include="Extensions\TaskExtensions.vb" />
+    <Compile Include="Extensions\WebExtensions.vb" />
+    <Compile Include="FileChecker.vb" />
+    <Compile Include="FileLogger.vb" />
+    <Compile Include="FileUtils.vb" />
+    <Compile Include="GeneralUtils.vb" />
+    <Compile Include="HttpRequestCodeException.vb" />
+    <Compile Include="IConfigProvider.vb" />
+    <Compile Include="IWorker.vb" />
+    <Compile Include="JsonConfigProvider.vb" />
+    <Compile Include="LogBehavior.vb" />
+    <Compile Include="Logger.vb" />
+    <Compile Include="LogLevel.vb" />
+    <Compile Include="Main.vb" />
+    <Compile Include="MathUtils.vb" />
+    <Compile Include="Microsoft\CodeAnalysis\EmbeddedAttribute.vb" />
+    <Compile Include="MsDelta.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="NoType.vb" />
+    <Compile Include="OneOf.2.vb" />
+    <Compile Include="OneOf.vb" />
+    <Compile Include="Paths.vb" />
+    <Compile Include="PathUtils.vb" />
+    <Compile Include="PreviewGetEventArgs.vb" />
+    <Compile Include="ProgressObserver.vb" />
+    <Compile Include="ProgressProvider.vb" />
+    <Compile Include="RateLimitedWorker.vb" />
+    <Compile Include="RateLimitMode.vb" />
+    <Compile Include="RedoableWorker.2.vb" />
+    <Compile Include="RedoableWorker.vb" />
+    <Compile Include="RedoableWorkerBase.vb" />
+    <Compile Include="RegistryUtils.vb" />
+    <Compile Include="StringUtils.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\AllowNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\ConstantExpectedAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\DisallowNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\DoesNotReturnAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\DoesNotReturnIfAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\ExperimentalAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MaybeNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MaybeNullWhenAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MemberNotNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MemberNotNullWhenAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\NotNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\NotNullIfNotNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\NotNullWhenAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\SetsRequiredMembersAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\StringSyntaxAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\UnscopedRefAttribute.vb" />
+    <Compile Include="System\Index.vb" />
+    <Compile Include="System\Range.vb" />
+    <Compile Include="System\Runtime\CompilerServices\AsyncMethodBuilderAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\CallerArgumentExpressionAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\CollectionBuilderAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\CompilerFeatureRequiredAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\InterpolatedStringHandlerArgumentAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\InterpolatedStringHandlerAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\IsByRefLikeAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\IsExternalInit.vb" />
+    <Compile Include="System\Runtime\CompilerServices\IsReadOnlyAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\ModuleInitializerAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\NullableAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\NullableContextAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\OverloadResolutionPriorityAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\ParamCollectionAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\RefSafetyRulesAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\RequiredMemberAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\RequiresLocationAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\SkipLocalsInitAttribute.vb" />
+    <Compile Include="System\Runtime\Versioning\RequiresPreviewFeaturesAttribute.vb" />
+    <Compile Include="TaskUtils.vb" />
+    <Compile Include="ValueRange.vb" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+</Project>

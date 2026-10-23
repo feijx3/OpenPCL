@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D1BEA845-B43B-4817-B007-68848C55B87F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MeloongCore.Wpf</RootNamespace>
+    <AssemblyName>MeloongCore.Wpf</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ookii.Dialogs.Wpf" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="My Project\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MeloongCore\WindowsUtils.vb" />
+    <Compile Include="MeloongCore\Wpf\AdditionConverter.vb" />
+    <Compile Include="MeloongCore\Wpf\Dialogs.vb" />
+    <Compile Include="MeloongCore\Wpf\Extensions\WpfExtensions.vb" />
+    <Compile Include="MeloongCore\Wpf\InverseBooleanConverter.vb" />
+    <Compile Include="MeloongCore\Wpf\InverseBooleanToVisibilityConverter.vb" />
+    <Compile Include="MeloongCore\Wpf\Main.vb" />
+    <Compile Include="MeloongCore\Wpf\ModernTooltipService.vb" />
+    <Compile Include="MeloongCore\Wpf\MultiplicationConverter.vb" />
+    <Compile Include="Microsoft\CodeAnalysis\EmbeddedAttribute.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\AllowNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\ConstantExpectedAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\DisallowNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\DoesNotReturnAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\DoesNotReturnIfAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\ExperimentalAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MaybeNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MaybeNullWhenAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MemberNotNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\MemberNotNullWhenAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\NotNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\NotNullIfNotNullAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\NotNullWhenAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\SetsRequiredMembersAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\StringSyntaxAttribute.vb" />
+    <Compile Include="System\Diagnostics\CodeAnalysis\UnscopedRefAttribute.vb" />
+    <Compile Include="System\Index.vb" />
+    <Compile Include="System\Range.vb" />
+    <Compile Include="System\Runtime\CompilerServices\AsyncMethodBuilderAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\CallerArgumentExpressionAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\CollectionBuilderAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\CompilerFeatureRequiredAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\InterpolatedStringHandlerArgumentAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\InterpolatedStringHandlerAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\IsExternalInit.vb" />
+    <Compile Include="System\Runtime\CompilerServices\ModuleInitializerAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\NullableAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\NullableContextAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\OverloadResolutionPriorityAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\ParamCollectionAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\RefSafetyRulesAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\RequiredMemberAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\RequiresLocationAttribute.vb" />
+    <Compile Include="System\Runtime\CompilerServices\SkipLocalsInitAttribute.vb" />
+    <Compile Include="System\Runtime\Versioning\RequiresPreviewFeaturesAttribute.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeloongCore\MeloongCore.vbproj">
+      <Project>{d1bea845-b43b-4817-b007-68848c55b87e}</Project>
+      <Name>MeloongCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+</Project>

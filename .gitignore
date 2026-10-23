@@ -1,0 +1,19 @@
+# 白名单：默认忽略一切，只放行程序源代码与工程文件。
+# 新增的 exe / dll / 图片 / 字体 / 日志 / 资源文件不会被误提交。
+*
+!*/
+
+# 源代码
+!*.cs
+!*.vb
+!*.xaml
+
+# 工程、解决方案与构建配置
+!*.csproj
+!*.vbproj
+!*.sln
+!*.manifest
+!*.settings
+
+!.gitignore
+!README.md

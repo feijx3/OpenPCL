@@ -1,0 +1,230 @@
+<Grid
+	x:Class="PCL.MyResourceItem"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:PCL"
+	x:Name="PanBack"
+	Height="64"
+	RenderTransformOrigin="0.5,0.5"
+	Background="{StaticResource ColorBrushSemiTransparent}"
+	SnapsToDevicePixels="True">
+	<Grid.ColumnDefinitions>
+		<ColumnDefinition
+			Width="7" />
+		<ColumnDefinition
+			Width="50" />
+		<ColumnDefinition
+			Width="8" />
+		<ColumnDefinition
+			Width="Auto" />
+		<ColumnDefinition
+			Width="1*" />
+	</Grid.ColumnDefinitions>
+	<Grid.RowDefinitions>
+		<RowDefinition
+			Height="1*" />
+		<RowDefinition
+			Height="17" />
+		<RowDefinition
+			Height="18" />
+		<RowDefinition
+			Height="16" />
+		<RowDefinition
+			Height="1.1*" />
+	</Grid.RowDefinitions>
+	<Border
+		Grid.Column="1"
+		Grid.Row="1"
+		Grid.RowSpan="3"
+		IsHitTestVisible="False"
+		SnapsToDevicePixels="True"
+		UseLayoutRounding="True"
+		HorizontalAlignment="Right"
+		VerticalAlignment="Center"
+		Width="50"
+		Height="50">
+		<UIElement.Clip>
+			<RectangleGeometry
+				Rect="0,0,50,50"
+				RadiusX="6"
+				RadiusY="6" />
+		</UIElement.Clip>
+		<!--未知连接 ID: 2-->
+		<local:MyImage
+			x:Name="PathLogo"
+			RenderOptions.BitmapScalingMode="HighQuality"
+			FallbackSource="pack://application:,,,/images/Icons/NoIcon.png" />
+	</Border>
+	<StackPanel
+		Grid.Column="3"
+		Grid.ColumnSpan="2"
+		Grid.Row="1"
+		VerticalAlignment="Bottom"
+		Margin="0,1,0,0"
+		Orientation="Horizontal"
+		IsHitTestVisible="False"
+		SnapsToDevicePixels="False"
+		UseLayoutRounding="False">
+		<!--未知连接 ID: 3-->
+		<TextBlock
+			x:Name="LabTitle"
+			TextTrimming="WordEllipsis"
+			FontSize="14"
+			Foreground="{DynamicResource ColorBrush1}" />
+		<!--未知连接 ID: 4-->
+		<TextBlock
+			x:Name="LabTitleRaw"
+			TextTrimming="WordEllipsis"
+			FontSize="12"
+			Foreground="{StaticResource ColorBrushGray1}"
+			Opacity="0.4"
+			VerticalAlignment="Bottom"
+			Visibility="Collapsed" />
+	</StackPanel>
+	<!--未知连接 ID: 5-->
+	<StackPanel
+		x:Name="PanTags"
+		Grid.Row="2"
+		Grid.Column="3"
+		Orientation="Horizontal"
+		VerticalAlignment="Bottom"
+		Margin="-1,0,1,0"
+		Visibility="Collapsed" />
+	<!--未知连接 ID: 6-->
+	<TextBlock
+		x:Name="LabInfo"
+		Grid.Row="2"
+		Grid.Column="4"
+		VerticalAlignment="Bottom"
+		Margin="0,0,3,0.5"
+		TextTrimming="CharacterEllipsis"
+		FontSize="12"
+		Foreground="{StaticResource ColorBrushGray3}"
+		IsHitTestVisible="True"
+		SnapsToDevicePixels="False"
+		UseLayoutRounding="False"
+		ToolTipService.InitialShowDelay="100">
+		<FrameworkElement.ToolTip>
+			<!--未知连接 ID: 7-->
+			<ToolTip
+				x:Name="ToolTipInfo" />
+		</FrameworkElement.ToolTip>
+	</TextBlock>
+	<Grid
+		Row="3"
+		Column="3"
+		ColumnSpan="2"
+		VerticalAlignment="Bottom"
+		IsHitTestVisible="False"
+		SnapsToDevicePixels="False"
+		UseLayoutRounding="False">
+		<Grid.ColumnDefinitions>
+			<!--未知连接 ID: 8-->
+			<ColumnDefinition
+				x:Name="ColumnVersion1"
+				Width="Auto" />
+			<!--未知连接 ID: 9-->
+			<ColumnDefinition
+				x:Name="ColumnVersion2"
+				Width="Auto"
+				SharedSizeGroup="ItemVersion" />
+			<!--未知连接 ID: 10-->
+			<ColumnDefinition
+				x:Name="ColumnVersion3"
+				Width="0.7*" />
+			<ColumnDefinition
+				Width="Auto" />
+			<ColumnDefinition
+				Width="55" />
+			<ColumnDefinition
+				Width="1*" />
+			<!--未知连接 ID: 11-->
+			<ColumnDefinition
+				x:Name="ColumnTime1"
+				Width="Auto" />
+			<!--未知连接 ID: 12-->
+			<ColumnDefinition
+				x:Name="ColumnTime2"
+				Width="Auto"
+				MinWidth="57"
+				SharedSizeGroup="ItemTime" />
+			<!--未知连接 ID: 13-->
+			<ColumnDefinition
+				x:Name="ColumnTime3"
+				Width="1*" />
+			<ColumnDefinition
+				Width="Auto" />
+			<ColumnDefinition
+				Width="Auto"
+				SharedSizeGroup="ItemSource" />
+			<ColumnDefinition
+				Width="1.7*" />
+		</Grid.ColumnDefinitions>
+		<!--未知连接 ID: 14-->
+		<Path
+			x:Name="PathVersion"
+			Grid.Column="0"
+			Fill="{StaticResource ColorBrushGray3}"
+			Stretch="Uniform"
+			Height="11"
+			Data="M940.4,463.7 L773.3,174.2 C756,144.2 724.0999999999999,125.79999999999998 689.5,125.79999999999998 L340.2,125.79999999999998 C305.59999999999997,125.79999999999998 273.7,144.29999999999998 256.4,174.2 L89.2,463.7 C71.9,493.7 71.9,530.6 89.2,560.5 L256.4,850 C273.7,880 305.59999999999997,898.4 340.2,898.4 L689.4,898.4 C724,898.4 755.9,879.9 773.1999999999999,850 L940.3999999999999,560.5 C957.6999999999998,530.6 957.6999999999998,493.7 940.3999999999999,463.7 M845.8,560.5 L725.9,768.1 C708.6,798.1 676.6999999999999,816.5 642.1,816.5 L387.5,816.5 C352.9,816.5 321,798 303.7,768.1 L183.9,560.5 C166.6,530.5 166.6,493.6 183.9,463.7 L303.7,256.2 C321,226.2 352.9,207.79999999999998 387.5,207.79999999999998 L642.1,207.79999999999998 C676.7,207.79999999999998 708.6,226.29999999999998 725.9,256.2 L845.6999999999999,463.7 C862.9999999999999,493.7 862.9999999999999,530.6 845.8,560.5 M522.3,321.2 C519.8,321.09999999999997 517.3,321 514.8,321 C394.9,321 300.79999999999995,431.3 328.49999999999994,556 C344.29999999999995,626.9 399.99999999999994,682.6 470.9,698.4 C488.4,702.3 505.59999999999997,703.8 522.3,703.1 C624.4,699.2 705.9,615.2 705.9,512.1 C706,409.1 624.4,325.1 522.3,321.20000000000005 M590.9,590.3 C572.4,608.3 547.9,619.1999999999999 522.3,621 L516.3,621.3 C486.09999999999997,621.6999999999999 457.69999999999993,609.9 436.59999999999997,588.3 C417.09999999999997,568.1999999999999 405.9,541.3 405.7,513.3 C405.4,483.69999999999993 416.8,455.9 437.7,434.99999999999994 C458.3,414.3999999999999 485.7,402.99999999999994 514.9,402.99999999999994 C517.4,402.99999999999994 519.9,403.09999999999997 522.4,403.29999999999995 C549.1,405.09999999999997 573.9,416.49999999999994 592.9,435.79999999999995 C612.5,455.79999999999995 623.6999999999999,482.69999999999993 624.1,510.69999999999993 C624.3000000000001,540.9 612.6,569.3 590.9,590.3 Z" />
+		<!--未知连接 ID: 15-->
+		<TextBlock
+			x:Name="LabVersion"
+			Grid.Column="1"
+			Margin="4,0,2,0"
+			VerticalAlignment="Center"
+			Foreground="{StaticResource ColorBrushGray3}"
+			FontSize="12"
+			TextTrimming="WordEllipsis" />
+		<!--未知连接 ID: 16-->
+		<Path
+			x:Name="PathDownload"
+			Grid.Column="3"
+			Fill="{StaticResource ColorBrushGray4}"
+			Stretch="Uniform"
+			Height="10.5"
+			Data="M955,610 L896,610 C881,610 867,623 867,639 L867,835 C867,850 854,864 838,864 L189,864 C174,864 160,851 160,835 L160,639 C160,624 147,610 131,610 L72,610 C57,610 43,623 43,639 L43,905 C43,948 78,983 121,983 L908,983 C951,983 986,948 986,905 L986,640 C986,625 973,611 957,611 M492,740 C503,751 521,751 533,740 L798,475 C809,464 809,446 798,434 L757,393 C746,382 728,382 716,393 L606,503 C595,514 573,506 573,490 L573,68 C571,53 555,39 541,39 L482,39 C467,39 453,52 453,68 L453,485 C453,502 432,510 420,498 L310,388 C299,377 281,377 269,388 L226,433 C215,444 215,462 226,474 L492,740 Z" />
+		<!--未知连接 ID: 17-->
+		<TextBlock
+			x:Name="LabDownload"
+			Grid.Column="4"
+			Margin="5,0,2,0"
+			VerticalAlignment="Center"
+			Foreground="{StaticResource ColorBrushGray4}"
+			FontSize="12" />
+		<!--未知连接 ID: 18-->
+		<Path
+			x:Name="PathTime"
+			Grid.Column="6"
+			Fill="{StaticResource ColorBrushGray4}"
+			Stretch="Uniform"
+			Height="11.5"
+			Margin="0,0,1,0"
+			Data="M810,403 L771,442 C761,452 743,452 732,442 L570,280 L570,692 C570,707 558,720 542,720 L486,720 C471,720 458,708 458,692 L458,280 L296,442 C286,452 268,452 257,442 L218,403 C208,393 208,375 218,364 L496,86 C506,76 524,76 535,86 L813,364 C823,374 823,392 813,403 M568,946 L456,946 L456,834 L568,834 L568,946 Z" />
+		<!--未知连接 ID: 19-->
+		<TextBlock
+			x:Name="LabTime"
+			Grid.Column="7"
+			Margin="5,0,2,0"
+			VerticalAlignment="Center"
+			Foreground="{StaticResource ColorBrushGray4}"
+			FontSize="12" />
+		<!--未知连接 ID: 20-->
+		<Path
+			x:Name="PathSource"
+			Grid.Column="9"
+			Fill="{StaticResource ColorBrushGray4}"
+			Stretch="Uniform"
+			Height="11.5"
+			Data="M511,143 C308,143 142,308 142,512 C142,715 307,881 511,881 C715,881 880,716 880,512 C880,309 715,143 511,143 M511,816 C482,816 443,757 422,657 L600,657 C580,757 541,816 511,816 M413,592 C411,568 410,541 410,513 C410,484 411,456 414,430 L611,430 C613,455 615,483 615,513 C615,541 614,567 612,592 L414,592 M511,209 C540,209 578,267 599,365 L422,365 C442,267 481,210 510,210 M675,430 L803,430 C810,456 814,484 814,512 C814,539 811,566 804,592 L675,592 C677,566 678,540 678,513 C678,485 677,457 674,430 M776,366 L666,366 C659,329 650,294 638,264 C634,253 629,242 623,231 C689,256 744,305 778,366 M400,231 C395,241 390,252 385,264 C373,294 364,328 357,366 L247,366 C281,306 336,257 401,232 M219,430 L347,430 C345,457 344,484 344,513 C344,540 345,566 347,592 L220,592 L220,598 C212,571 208,543 208,513 C208,484 211,456 219,430 M243,657 L355,657 C362,695 371,731 384,762 C388,773 393,784 399,795 C332,769 277,719 243,656 M621,795 C626,785 631,774 636,762 C648,732 658,696 665,657 L776,657 C742,719 687,768 620,794 Z" />
+		<!--未知连接 ID: 21-->
+		<TextBlock
+			x:Name="LabSource"
+			Grid.Column="10"
+			Margin="5,0,2,0"
+			VerticalAlignment="Center"
+			Foreground="{StaticResource ColorBrushGray4}"
+			FontSize="12" />
+	</Grid>
+</Grid>
