@@ -949,25 +949,7 @@ Namespace PCL
         End Sub
 
         Public Sub Telemetry([Event] As String, ParamArray Datas As String())
-            Dim CS$<>8__locals1 As ModMain._Closure$__78-0 = New ModMain._Closure$__78-0(CS$<>8__locals1)
-            CS$<>8__locals1.$VB$Local_Event = [Event]
-            CS$<>8__locals1.$VB$Local_Datas = Datas
-            If Settings.[Get](Of Boolean)("SystemSystemTelemetry", Nothing) AndAlso "https://ap-shanghai.cls.tencentcs.com/track?topic_id=pcl-remote-1253424809".StartsWithF("http", False) Then
-                ' The following expression was wrapped in a checked-expression
-                ModBase.RunInNewThread(Sub()
-                    Try
-                        Logger.Info(String.Format("匿名数据上报：{0}", CS$<>8__locals1.$VB$Local_Event), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModMain.vb")
-                        Dim text As String = String.Format("{0}&Event={1}", "https://ap-shanghai.cls.tencentcs.com/track?topic_id=pcl-remote-1253424809", StringUtils.UrlEscape(CS$<>8__locals1.$VB$Local_Event))
-                        Dim num As Integer = CS$<>8__locals1.$VB$Local_Datas.Length - 1
-                        For i As Integer = 0 To num Step 2
-                            text = String.Concat(New String() { text, "&", StringUtils.UrlEscape(CS$<>8__locals1.$VB$Local_Datas(i)), "=", StringUtils.UrlEscape(CS$<>8__locals1.$VB$Local_Datas(i + 1).ReplaceLineEndings(vbLf, True)) })
-                        Next
-                        ModNet.NetRequestByClient(text, Nothing, Nothing, Nothing, "*/*", 25000, Nothing, False, Nothing, False, False)
-                    Catch ex As Exception
-                        Logger.Warn(ex, "匿名数据上报失败", LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModMain.vb")
-                    End Try
-                End Sub, "Telemetry", ThreadPriority.Lowest)
-            End If
+            ' 保留调用接口以兼容现有事件，禁用数据上报。
         End Sub
 
         Private Sub TimerMain()

@@ -596,9 +596,8 @@ Namespace PCL
                 Logger.Info(String.Format("准备导出整合包，共有 {0} 条规则，{1} 条追加内容行", CS$<>8__locals1.$VB$Local_AllRules.Count, CS$<>8__locals1.$VB$Local_AllExtraFiles.Count), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Pages\PageInstance\PageInstanceExport.xaml.vb")
                 Dim list2 As List(Of ModLoader.LoaderBase) = New List(Of ModLoader.LoaderBase)()
                 If CS$<>8__locals1.$VB$Local_IncludePCL Then
-                    list2.Add(New ModLoader.LoaderTask(Of Integer, Integer)("下载 PCL 正式版", Sub(Loader As ModLoader.LoaderTask(Of Integer, Integer))
-                        ModSecret.DownloadLatestPCL(Loader)
-                        FileUtils.Copy(ModBase.PathTemp + "Latest.exe", CS$<>8__locals1.$VB$Local_CacheFolder + "OpenPCL.exe")
+                    list2.Add(New ModLoader.LoaderTask(Of Integer, Integer)("复制 OpenPCL 启动器", Sub(Loader As ModLoader.LoaderTask(Of Integer, Integer))
+                        FileUtils.Copy(ModBase.PathExe, CS$<>8__locals1.$VB$Local_CacheFolder + "OpenPCL.exe")
                     End Sub, Nothing, ThreadPriority.Normal) With { .ProgressWeight = 0.5, .Block = False })
                 End If
                 list2.Add(New ModLoader.LoaderTask(Of Integer, List(Of LocalResourceFile))("复制导出内容", Sub(Loader As ModLoader.LoaderTask(Of Integer, List(Of LocalResourceFile)))

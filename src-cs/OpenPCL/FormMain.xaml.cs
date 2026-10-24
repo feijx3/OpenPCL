@@ -2328,7 +2328,6 @@ namespace PCL
                 Thread.Sleep(100);
                 ModDownload.DlClientListMojangLoader.Start(1, false);
                 this.RunCountSub();
-                ModSecret.ServerLoader.Start(null, false);
                 ModBase.RunInNewThread(new Action(ModMain.TryClearTaskTemp), "TryClearTaskTemp", ThreadPriority.BelowNormal);
             }
             catch (Exception ex)
@@ -3065,11 +3064,6 @@ namespace PCL
                         }
                         catch (Exception ex)
                         {
-                            if (Operators.CompareString(ex.Message, "为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……", false) == 0)
-                            {
-                                ModMain.Hint(ex.Message, ModMain.HintType.Red, true);
-                                return;
-                            }
                             if (ex.IsCanceled())
                             {
                                 return;

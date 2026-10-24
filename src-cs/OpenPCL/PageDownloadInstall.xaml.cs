@@ -92,7 +92,7 @@ namespace PCL
         public virtual void LoaderInit()
         {
             this.ControlInit();
-            base.PageLoaderInit<string, ModDownload.DlClientListResult>(this.LoadMinecraft, this.PanLoad, this.PanAllBack, null, new ModLoader.LoaderTask<string, ModDownload.DlClientListResult>("关闭下载", (PageDownloadInstall._Closure___._IR3_3 == null) ? (PageDownloadInstall._Closure___._IR3_3 = new Action<ModLoader.LoaderTask<string, ModDownload.DlClientListResult>>(PageDownloadInstall._Closure___._I._Lambda___R3_3)) : PageDownloadInstall._Closure___._IR3_3, null, ThreadPriority.Normal), new Action<ModLoader.LoaderTask<string, ModDownload.DlClientListResult>>(this._Lambda___R3_4), null, true);
+            base.PageLoaderInit<string, ModDownload.DlClientListResult>(this.LoadMinecraft, this.PanLoad, this.PanAllBack, null, ModDownload.DlClientListLoader, new Action<ModLoader.LoaderTask<string, ModDownload.DlClientListResult>>(this._Lambda___R3_4), null, true);
         }
 
         public virtual void Init()
@@ -3561,16 +3561,6 @@ namespace PCL
         [Serializable]
         private new sealed class _Closure___
         {
-            internal void _Lambda___R3_3(ModLoader.LoaderTask<string, ModDownload.DlClientListResult> a0)
-            {
-                ((PageDownloadInstall._Closure___._I3_0 == null) ? (PageDownloadInstall._Closure___._I3_0 = new VB_AnonymousDelegate_10(PageDownloadInstall._Closure___._I._Lambda___3_0)) : PageDownloadInstall._Closure___._I3_0)();
-            }
-
-            internal void _Lambda___3_0()
-            {
-                throw new Exception("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……");
-            }
-
             internal DateTime _Lambda___35_0(JObject j)
             {
                 return j["releaseTime"].Value<DateTime>();
@@ -3597,10 +3587,6 @@ namespace PCL
             }
 
             public static readonly PageDownloadInstall._Closure___ _I = new PageDownloadInstall._Closure___();
-
-            public static VB_AnonymousDelegate_10 _I3_0;
-
-            public static Action<ModLoader.LoaderTask<string, ModDownload.DlClientListResult>> _IR3_3;
 
             public static Func<JObject, DateTime> _I35_0;
 

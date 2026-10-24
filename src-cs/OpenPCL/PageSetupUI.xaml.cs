@@ -32,10 +32,6 @@ namespace PCL
             this.SliderLauncherSat_WithEvents = this.SliderLauncherSat;
             this.SliderLauncherLight_WithEvents = this.SliderLauncherLight;
             this.LabLauncherTheme5Unlock_WithEvents = this.LabLauncherTheme5Unlock;
-            this.RadioLauncherTheme8_WithEvents = this.RadioLauncherTheme8;
-            this.LabLauncherTheme8Copy_WithEvents = this.LabLauncherTheme8Copy;
-            this.RadioLauncherTheme9_WithEvents = this.RadioLauncherTheme9;
-            this.LabLauncherTheme9Copy_WithEvents = this.LabLauncherTheme9Copy;
             this.RadioLauncherTheme11_WithEvents = this.RadioLauncherTheme11;
             this.LabLauncherTheme11Click_WithEvents = this.LabLauncherTheme11Click;
             this.RadioLauncherTheme14_WithEvents = this.RadioLauncherTheme14;
@@ -142,16 +138,7 @@ namespace PCL
                 {
                     this._STATIC_PageSetupUI_Loaded_20211C128141_Reloaded = true;
                     this.SliderLoad();
-                    if (!this.RadioLauncherTheme8.IsEnabled)
-                    {
-                        this.LabLauncherTheme8Copy.ToolTip = string.Format("累积赞助达到 ¥23.33 后，在爱发电私信发送【土豆 {0}】以解锁。", ModBase.Identify) + "\r\n右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！";
-                    }
-                    this.RadioLauncherTheme8.ToolTip = string.Format("累积赞助达到 ¥23.33 后，在爱发电私信发送【土豆 {0}】以解锁", ModBase.Identify);
-                    if (!this.RadioLauncherTheme9.IsEnabled)
-                    {
-                        this.LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）\r\n· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁";
-                    }
-                    this.RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁\r\n· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁";
+
                 }
             }
         }
@@ -603,15 +590,9 @@ namespace PCL
             }
         }
 
-        private void LabLauncherTheme8Copy_MouseRightButtonUp()
-        {
-            ModBase.OpenWebsite("https://meloong.com/afd/a/LTCat");
-        }
 
-        private void LabLauncherTheme9Copy_MouseRightButtonUp()
-        {
-            PageOtherLeft.TryFeedback();
-        }
+
+
 
         private void RadioLauncherTheme14_Change(object sender, ModBase.RouteEventArgs e)
         {
@@ -1040,109 +1021,9 @@ namespace PCL
 
 
 
-        internal virtual OurRadioBox RadioLauncherTheme8_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._RadioLauncherTheme8;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                MouseButtonEventHandler mouseButtonEventHandler = new MouseButtonEventHandler(this._Lambda___R144_6);
-                OurRadioBox ourRadioBox = this._RadioLauncherTheme8;
-                if (ourRadioBox != null)
-                {
-                    ourRadioBox.MouseRightButtonUp -= mouseButtonEventHandler;
-                }
-                this._RadioLauncherTheme8 = value;
-                ourRadioBox = this._RadioLauncherTheme8;
-                if (ourRadioBox != null)
-                {
-                    ourRadioBox.MouseRightButtonUp += mouseButtonEventHandler;
-                }
-            }
-        }
 
-        internal virtual TextBlock LabLauncherTheme8Copy_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._LabLauncherTheme8Copy;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                MouseButtonEventHandler mouseButtonEventHandler = new MouseButtonEventHandler(this._Lambda___R148_7);
-                TextBlock textBlock = this._LabLauncherTheme8Copy;
-                if (textBlock != null)
-                {
-                    textBlock.MouseRightButtonUp -= mouseButtonEventHandler;
-                }
-                this._LabLauncherTheme8Copy = value;
-                textBlock = this._LabLauncherTheme8Copy;
-                if (textBlock != null)
-                {
-                    textBlock.MouseRightButtonUp += mouseButtonEventHandler;
-                }
-            }
-        }
 
-        internal virtual OurRadioBox RadioLauncherTheme9_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._RadioLauncherTheme9;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                MouseButtonEventHandler mouseButtonEventHandler = new MouseButtonEventHandler(this._Lambda___R152_8);
-                OurRadioBox ourRadioBox = this._RadioLauncherTheme9;
-                if (ourRadioBox != null)
-                {
-                    ourRadioBox.MouseRightButtonUp -= mouseButtonEventHandler;
-                }
-                this._RadioLauncherTheme9 = value;
-                ourRadioBox = this._RadioLauncherTheme9;
-                if (ourRadioBox != null)
-                {
-                    ourRadioBox.MouseRightButtonUp += mouseButtonEventHandler;
-                }
-            }
-        }
 
-        internal virtual TextBlock LabLauncherTheme9Copy_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._LabLauncherTheme9Copy;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                MouseButtonEventHandler mouseButtonEventHandler = new MouseButtonEventHandler(this._Lambda___R156_9);
-                TextBlock textBlock = this._LabLauncherTheme9Copy;
-                if (textBlock != null)
-                {
-                    textBlock.MouseRightButtonUp -= mouseButtonEventHandler;
-                }
-                this._LabLauncherTheme9Copy = value;
-                textBlock = this._LabLauncherTheme9Copy;
-                if (textBlock != null)
-                {
-                    textBlock.MouseRightButtonUp += mouseButtonEventHandler;
-                }
-            }
-        }
 
 
         internal virtual OurRadioBox RadioLauncherTheme11_WithEvents
@@ -1994,29 +1875,9 @@ namespace PCL
             this.HSL_Change();
         }
 
-        [CompilerGenerated]
-        private void _Lambda___R144_6(object a0, MouseButtonEventArgs a1)
-        {
-            this.LabLauncherTheme8Copy_MouseRightButtonUp();
-        }
 
-        [CompilerGenerated]
-        private void _Lambda___R148_7(object a0, MouseButtonEventArgs a1)
-        {
-            this.LabLauncherTheme8Copy_MouseRightButtonUp();
-        }
 
-        [CompilerGenerated]
-        private void _Lambda___R152_8(object a0, MouseButtonEventArgs a1)
-        {
-            this.LabLauncherTheme9Copy_MouseRightButtonUp();
-        }
 
-        [CompilerGenerated]
-        private void _Lambda___R156_9(object a0, MouseButtonEventArgs a1)
-        {
-            this.LabLauncherTheme9Copy_MouseRightButtonUp();
-        }
 
         [CompilerGenerated]
         private void _Lambda___R164_10(object a0, MouseButtonEventArgs a1)
@@ -2186,21 +2047,9 @@ namespace PCL
         [AccessedThroughProperty("RadioLauncherTheme13")]
         private OurRadioBox _RadioLauncherTheme13;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("RadioLauncherTheme8")]
-        private OurRadioBox _RadioLauncherTheme8;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("LabLauncherTheme8Copy")]
-        private TextBlock _LabLauncherTheme8Copy;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("RadioLauncherTheme9")]
-        private OurRadioBox _RadioLauncherTheme9;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("LabLauncherTheme9Copy")]
-        private TextBlock _LabLauncherTheme9Copy;
 
         [CompilerGenerated]
         [AccessedThroughProperty("RadioLauncherTheme10")]
@@ -2218,9 +2067,6 @@ namespace PCL
         [AccessedThroughProperty("RadioLauncherTheme14")]
         private OurRadioBox _RadioLauncherTheme14;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("PanLauncherHide")]
-        private Border _PanLauncherHide;
 
         [CompilerGenerated]
         [AccessedThroughProperty("CardBackground")]

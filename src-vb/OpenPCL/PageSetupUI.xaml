@@ -166,7 +166,7 @@
 							<TextBlock
 								VerticalAlignment="Center"
 								HorizontalAlignment="Left"
-								Text="隐藏主题"
+								Text="更多主题"
 								Margin="0,0,20,0"
 								Grid.Row="1" />
 							<!--未知连接 ID: 14-->
@@ -217,7 +217,7 @@
 								Column="1"
 								Row="1"
 								Text="玄素黑"
-								Opacity="0"
+								Opacity="1"
 								ToolTip="灰色是个谎言" />
 							<!--未知连接 ID: 20-->
 							<local:OurRadioBox
@@ -226,14 +226,15 @@
 								Row="1"
 								Text="玄素黑"
 								IsEnabled="False"
-								Opacity="1" />
+								Opacity="1"
+                                Visibility="Collapsed" />
 							<!--未知连接 ID: 21-->
 							<TextBlock
 								x:Name="LabLauncherTheme5Unlock"
 								Grid.Column="1"
 								Grid.Row="1"
 								Background="{StaticResource ColorBrushSemiTransparent}"
-								ToolTip="灰色是个谎言" />
+								ToolTip="灰色是个谎言" Visibility="Collapsed" />
 							<!--未知连接 ID: 22-->
 							<local:OurRadioBox
 								x:Name="RadioLauncherTheme12"
@@ -242,7 +243,7 @@
 								Column="2"
 								Row="1"
 								Text="滑稽彩"
-								IsEnabled="False"
+								IsEnabled="True"
 								ToolTip="滑稽树上滑稽果，滑稽树下你和我，滑稽之日搞事情，欢乐多又多"
 								ToolTipService.ShowOnDisabled="True" />
 							<!--未知连接 ID: 23-->
@@ -253,7 +254,7 @@
 								Column="3"
 								Row="1"
 								Text="铁杆粉"
-								IsEnabled="False"
+								IsEnabled="True"
 								ToolTip="99 次重逢的喜悦"
 								ToolTipService.ShowOnDisabled="True" />
 							<!--未知连接 ID: 24-->
@@ -264,7 +265,7 @@
 								Column="4"
 								Row="1"
 								Text="神秘紫"
-								IsEnabled="False"
+								IsEnabled="True"
 								ToolTip="072 101 108 112 032 068 101 118 032 048 046 052 046 052"
 								ToolTipService.ShowOnDisabled="True" />
 							<!--未知连接 ID: 25-->
@@ -275,7 +276,7 @@
 								Column="5"
 								Row="1"
 								Text="欧皇彩"
-								IsEnabled="False"
+								IsEnabled="True"
 								ToolTip="这就是传说中的欧皇了吧"
 								ToolTipService.ShowOnDisabled="True" />
 							<!--未知连接 ID: 26-->
@@ -286,13 +287,13 @@
 								Column="1"
 								Row="2"
 								Text="秋仪金"
-								IsEnabled="False" />
+								IsEnabled="True" />
 							<!--未知连接 ID: 27-->
 							<TextBlock
 								x:Name="LabLauncherTheme8Copy"
 								Grid.Column="1"
 								Grid.Row="2"
-								Background="{StaticResource ColorBrushSemiTransparent}" />
+								Background="{StaticResource ColorBrushSemiTransparent}" Visibility="Collapsed" />
 							<!--未知连接 ID: 28-->
 							<local:OurRadioBox
 								x:Name="RadioLauncherTheme9"
@@ -301,13 +302,13 @@
 								Column="2"
 								Row="2"
 								Text="活跃橙"
-								IsEnabled="False" />
+								IsEnabled="True" />
 							<!--未知连接 ID: 29-->
 							<TextBlock
 								x:Name="LabLauncherTheme9Copy"
 								Grid.Column="2"
 								Grid.Row="2"
-								Background="{StaticResource ColorBrushSemiTransparent}" />
+								Background="{StaticResource ColorBrushSemiTransparent}" Visibility="Collapsed" />
 							<!--未知连接 ID: 30-->
 							<local:OurRadioBox
 								x:Name="RadioLauncherTheme10"
@@ -316,7 +317,7 @@
 								Column="3"
 								Row="2"
 								Text="跳票红"
-								IsEnabled="False"
+								IsEnabled="True"
 								ToolTip="进行一次正版登录，支持正版游戏！"
 								ToolTipService.ShowOnDisabled="True" />
 							<!--未知连接 ID: 31-->
@@ -327,14 +328,14 @@
 								Column="4"
 								Row="2"
 								Text="极客蓝"
-								IsEnabled="False"
+								IsEnabled="True"
 								ToolTip="右键打开解密游戏入口" />
 							<!--未知连接 ID: 32-->
 							<TextBlock
 								x:Name="LabLauncherTheme11Click"
 								Grid.Column="4"
 								Grid.Row="2"
-								Background="{StaticResource ColorBrushSemiTransparent}" />
+								Background="{StaticResource ColorBrushSemiTransparent}" Visibility="Collapsed" />
 							<!--未知连接 ID: 33-->
 							<local:OurRadioBox
 								x:Name="RadioLauncherTheme14"
@@ -343,8 +344,7 @@
 								Column="5"
 								Row="2"
 								Text="自定义"
-								IsEnabled="False"
-								ToolTip="需要解锁五个隐藏主题"
+								IsEnabled="True"
 								ToolTipService.ShowOnDisabled="True" />
 						</Grid>
 						<local:OurCheckBox
@@ -354,31 +354,6 @@
 							Height="22" />
 					</StackPanel>
 					<!--未知连接 ID: 34-->
-					<Border
-						Name="PanLauncherHide"
-						Background="#DDDDDDDD"
-						Margin="-8,23,-5,28"
-						CornerRadius="4"
-						Visibility="Collapsed">
-						<StackPanel
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center">
-							<TextBlock
-								Text="如果可以小小赞助一下 PCL，就能解锁主题颜色更换功能啦……&#xA;多亏了大家的支持，PCL 才能在免费、无任何广告的情况下维持数年的更新（磕头）！"
-								FontSize="13"
-								Margin="0,0,0,0" />
-							<local:OurButton
-								Height="32"
-								MinWidth="140"
-								Text="支持 PCL 开发！"
-								Padding="13,0"
-								HorizontalAlignment="Center"
-								Margin="0,9,0,0"
-								ColorType="Highlight"
-								local:CustomEventService.EventType="打开网页"
-								local:CustomEventService.EventData="https://meloong.com/afd/a/LTCat" />
-						</StackPanel>
-					</Border>
 				</Grid>
 			</local:OurCard>
 			<!--未知连接 ID: 35-->
@@ -1152,7 +1127,7 @@
 							VerticalAlignment="Center"
 							Row="3"
 							Column="3"
-							Text="关于与鸣谢"
+							Text="关于"
 							local:SettingService.Key="UiHiddenOtherAbout" />
 						<!--未知连接 ID: 92-->
 						<local:OurCheckBox

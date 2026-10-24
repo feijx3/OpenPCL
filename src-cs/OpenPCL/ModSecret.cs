@@ -285,175 +285,21 @@ namespace PCL
 
         internal static bool ThemeCheckOne(int Id)
         {
-            bool flag;
-            if (new int[] { 0, 1, 2, 3, 4, 42 }.Contains(Id))
-            {
-                flag = true;
-            }
-            else if (ModSecret.PotatoFeatures.Contains("Theme" + Conversions.ToString(Id)))
-            {
-                flag = true;
-            }
-            else
-            {
-                int num = Id;
-                if (num != 8)
-                {
-                    if (num != 14)
-                    {
-                        if (Settings.Get<string>("UiLauncherThemeHide", null).Contains("7"))
-                        {
-                            ModSecret.ThemeUnlock(7, false, null);
-                        }
-                        flag = Settings.Get<string>("UiLauncherThemeHide2", null).ToString().Split("|", false)
-                            .Contains(Id.ToString());
-                    }
-                    else
-                    {
-                        flag = Enumerable.Range(5, 9).Count<int>(new Func<int, bool>(ModSecret.ThemeCheckOne)) >= 5;
-                    }
-                }
-                else
-                {
-                    flag = ModSecret.CurrentRank >= DonationRank.Rank23;
-                }
-            }
-            return flag;
+            return (Id >= 0 && Id <= 14) || Id == 42;
         }
 
         internal static bool ThemeUnlock(int Id, bool ShowDoubleHint = true, string UnlockHint = null)
         {
-            bool flag;
-            if (ModMain.FrmMain == null)
-            {
-                flag = false;
-            }
-            else
-            {
-                if (Id == 8)
-                {
-                    throw new Exception("不可使用此方式解锁秋仪金！");
-                }
-                List<string> list = new List<string>(Settings.Get<string>("UiLauncherThemeHide2", null).ToString().Split("|", false));
-                if (list.Contains(Id.ToString()))
-                {
-                    if (ShowDoubleHint)
-                    {
-                        ModMain.Hint("该隐藏主题已被解锁！", ModMain.HintType.Blue, true);
-                    }
-                    flag = false;
-                }
-                else
-                {
-                    Logger.Info(string.Format("解锁隐藏主题：{0}", Id), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    if (UnlockHint != null)
-                    {
-                        ModMain.Hint(UnlockHint, ModMain.HintType.Green, false);
-                    }
-                    list.Add(Id.ToString());
-                    Settings.Set("UiLauncherThemeHide2", list.Join("|"), null);
-                    ModSecret.ThemeCheckAll(true);
-                    flag = true;
-                }
-            }
-            return flag;
+            // 所有主题默认可用，不再创建解锁记录或重复提示。
+            return false;
         }
 
         internal static void UpdateCheckByButton()
         {
-            if (ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init == null)
-            {
-                Interlocked.CompareExchange<StaticLocalInitFlag>(ref ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init, new StaticLocalInitFlag(), null);
-            }
-            bool flag = false;
-            try
-            {
-                Monitor.Enter(ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init, ref flag);
-                if (ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init.State == 0)
-                {
-                    ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init.State = 2;
-                    ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate = false;
-                }
-                else if (ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init.State == 2)
-                {
-                    throw new IncompleteInitialization();
-                }
-            }
-            finally
-            {
-                ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init.State = 1;
-                if (flag)
-                {
-                    Monitor.Exit(ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init);
-                }
-            }
-            if (ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate)
-            {
-                ModMain.Hint("正在检查更新，请稍候！", ModMain.HintType.Blue, true);
-                return;
-            }
-            ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate = true;
-            ModBase.RunInThread((ModSecret._Closure___._I40_0 == null) ? (ModSecret._Closure___._I40_0 = new Action(ModSecret._Closure___._I._Lambda___40_0)) : ModSecret._Closure___._I40_0);
+            ModMain.Hint("此构建不提供启动器更新检查，请手动替换程序。", ModMain.HintType.Blue, true);
         }
 
-        private static void UpdateStart(bool Silent, IEnumerable<string> UrlsOverride = null)
-        {
-            ModSecret._Closure___43_0 CS_locals1 = new ModSecret._Closure___43_0(null);
-            CS_locals1._VB_Local_UrlsOverride = UrlsOverride;
-            if (ModSecret.IsUpdating)
-            {
-                if (!Silent)
-                {
-                    ModMain.Hint("PCL 正在下载更新，更新结束时将自动重启，请稍候！", ModMain.HintType.Blue, true);
-                    ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate = false;
-                }
-                if (ModSecret.IsUpdateWaitingRestart)
-                {
-                    ModSecret.UpdateRestart(true);
-                    return;
-                }
-            }
-            else
-            {
-                ModSecret.IsUpdating = true;
-                ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate = Silent;
-                if (!ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate)
-                {
-                    ModMain.Hint("PCL 正在下载更新，更新结束时将自动重启，请稍候！", ModMain.HintType.Blue, true);
-                }
-                try
-                {
-                    ModSecret._Closure___43_1 CS_locals2 = new ModSecret._Closure___43_1(null);
-                    CS_locals2._VB_NonLocal__VB_Closure_2 = CS_locals1;
-                    CS_locals2._VB_Local_Urls = null;
-                    CS_locals2._VB_Local_Extension = null;
-                    CS_locals2._VB_Local_LocalPath = null;
-                    CS_locals2._VB_Local_Loader = new ModLoader.LoaderCombo<string>("启动器更新", new ModLoader.LoaderBase[]
-                    {
-                        new ModLoader.LoaderTask<string, List<ModNet.NetFile>>("获取更新信息", new Action<ModLoader.LoaderTask<string, List<ModNet.NetFile>>>(CS_locals2._Lambda___0), null, ThreadPriority.Normal)
-                        {
-                            ProgressWeight = 0.1
-                        },
-                        new ModNet.LoaderDownload("下载更新文件", new List<ModNet.NetFile>())
-                        {
-                            ProgressWeight = 1.0
-                        },
-                        new ModLoader.LoaderTask<string, int>("安装更新", new Action<ModLoader.LoaderTask<string, int>>(CS_locals2._Lambda___R1), null, ThreadPriority.Normal)
-                        {
-                            ProgressWeight = 0.1
-                        }
-                    });
-                    CS_locals2._VB_Local_Loader.OnStateChanged = new Action<ModLoader.LoaderBase>(CS_locals2._Lambda___R2);
-                    CS_locals2._VB_Local_Loader.Start(null, false);
-                    ModBase.RunInUi(new Action(CS_locals2._Lambda___4), false);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex, "开始启动器更新失败", LogBehavior.AlertThenFeedback, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    ModSecret.IsUpdating = false;
-                }
-            }
-        }
+
 
         public static void UpdateRestart(bool TriggerRestartAndByEnd)
         {
@@ -598,454 +444,39 @@ namespace PCL
             }
         }
 
-        internal static void DownloadLatestPCL(ModLoader.LoaderBase LoaderToSyncProgress = null)
-        {
-            int num = (FileUtils.Exists(ModBase.PathTemp + "Latest.exe") ? Settings.Get<int>("SystemHighestSavedBetaVersionReg", null) : 0);
-            int num2 = 0;
-            string text = FileUtils.TryReadAsString(ModBase.PathTemp + "Cache\\Notice.cfg", null, null) ?? "";
-            if (text.Split("|", false).Count<string>() >= 3)
-            {
-                num2 = Conversions.ToInteger(text.Split("|", false)[2]);
-            }
-            if (num < num2)
-            {
-                Logger.Info(string.Format("需要下载最新正式版：{0} -> {1}", num, num2), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                if (ModSecret.ServerConfig == null)
-                {
-                    ModSecret.ServerLoader.WaitForExit(null, null, ModSecret.ServerLoader.State == ModBase.LoadState.Finished, default(CancellationToken), null);
-                }
-                if (ModSecret.ServerConfig == null)
-                {
-                    throw new Exception("无法从服务器获取正式版 PCL 下载链接！");
-                }
-                ModNet.NetDownloadByLoader(ModSecret.ServerConfig["Update"]["Release"]["DownloadUrls"].Select<JToken, string>((ModSecret._Closure___._I47_0 == null) ? (ModSecret._Closure___._I47_0 = new Func<JToken, string>(ModSecret._Closure___._I._Lambda___47_0)) : ModSecret._Closure___._I47_0).ToList<string>(), ModBase.PathTemp + "Latest.zip", LoaderToSyncProgress, new FileChecker
-                {
-                    MinSize = 1048576L
-                }, false);
-                FileUtils.ExtractToDirectory(ModBase.PathTemp + "Latest.zip", ModBase.PathTemp, default(CancellationToken), null);
-                FileUtils.Delete(ModBase.PathTemp + "Latest.zip", false);
-                FileUtils.Move(ModBase.PathTemp + "OpenPCL.exe", ModBase.PathTemp + "Latest.exe", false);
-                Settings.Set("SystemHighestSavedBetaVersionReg", num2, null);
-            }
-        }
+
 
         private static void ServerSub(ModLoader.LoaderTask<int, int> Loader)
         {
+            string path = ModBase.PathTemp + "Cache\\ServerConfig.json";
+            ModSecret.ServerConfig = null;
             try
             {
-                if (FileUtils.Exists(Paths.Base + "PCL\\update.exe"))
+                if (FileUtils.Exists(path))
                 {
-                    FileUtils.Delete(Paths.Base + "PCL\\update.exe", false);
-                    Logger.Info("已清理更新缓存", LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
+                    ModSecret.ServerConfig = (JObject)FileUtils.ReadAsJson(path, null, null);
                 }
             }
             catch (Exception ex)
             {
-                Logger.Warn(ex, "清理更新缓存失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
+                Logger.Warn(ex, "读取联机配置缓存失败", LogBehavior.ToastIfDebug);
             }
-            int num = 0;
-            string text = ModBase.PathTemp + "Cache\\ServerConfig.json";
-            checked
+            try
             {
-                try
+                ModSecret.ServerConfig = (JObject)ModNet.NetRequestByClientRetry("https://pcl2-server-1253424809.file.myqcloud.com/ServerConfig.json{CDN}", null, null, null, null, "*/*", null, true, null, false).DeserializeJson();
+                FileUtils.Write(path, ModSecret.ServerConfig.ToString(), null);
+            }
+            catch (Exception ex)
+            {
+                if (ModSecret.ServerConfig == null)
                 {
-                    if (FileUtils.Exists(text))
-                    {
-                        ModSecret.ServerConfig = (JObject)FileUtils.ReadAsJson(text, null, null);
-                        num = (int)Math.Round(ModBase.Val(ModSecret.ServerConfig["Version"]));
-                        Logger.Info(string.Format("已读取本地缓存的配置：{0}", num), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    }
+                    throw;
                 }
-                catch (Exception ex2)
-                {
-                    Logger.Warn(ex2, "读取配置信息失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    ModSecret.ServerConfig = null;
-                    FileUtils.Delete(text, false);
-                }
-                Loader.Progress = 0.2;
-                int num2 = Settings.Get<int>("HintNotice", null);
-                string text2 = ModBase.PathTemp + "Cache\\Notice.cfg";
-                string text3;
-                int num3;
-                try
-                {
-                    text3 = ModNet.NetRequestByClientRetry("https://pcl2-server-1253424809.file.myqcloud.com/notice.cfg{CDN}", null, null, null, null, "*/*", null, false, null, false);
-                    num3 = (int)Math.Round(ModBase.Val(text3.Split("|", false)[0]));
-                    if (num3 == 0)
-                    {
-                        throw new Exception("获取到的内容有误！（" + text3 + "）");
-                    }
-                    if (num3 > num2)
-                    {
-                        Logger.Info(string.Format("本地公告编号：{0}，服务器公告：{1}，需更新", num2, text3), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    }
-                    else
-                    {
-                        Logger.Info(string.Format("本地公告编号：{0}，服务器公告：{1}，无需更新", num2, text3), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    }
-                    FileUtils.Write(text2, text3, null);
-                }
-                catch (Exception ex3)
-                {
-                    if (ex3 is InvalidOperationException && ex3.Message.Contains("FIPS"))
-                    {
-                        if (ModMain.OurMsgBox("由于系统未启用 FIPS 兼容算法，PCL 可能无法正常运行。\r\n请按照教程启用该功能，然后重启 PCL。", "兼容性警告", "打开教程", "取消", "", true, true, false, null, null, null) == 1)
-                        {
-                            ModBase.OpenWebsite("https://blog.csdn.net/qq_37608398/article/details/81209922");
-                        }
-                    }
-                    else
-                    {
-                        Logger.Warn(ex3, "获取 PCL 服务器状态失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                        FileUtils.Delete(text2, false);
-                    }
-                    return;
-                }
-                Loader.Progress = 0.4;
-                try
-                {
-                    double num4 = ModBase.Val(text3.Split("|", false)[4]);
-                    if ((double)num < num4)
-                    {
-                        Logger.Info(string.Format("本地配置版本号：{0}，服务器配置版本号：{1}，需要更新", num, num4), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                        ModNet.NetDownloadByClient("https://pcl2-server-1253424809.file.myqcloud.com/ServerConfig.json{CDN}", text, false);
-                        ModSecret.ServerConfig = (JObject)FileUtils.ReadAsJson(text, null, null);
-                    }
-                }
-                catch (Exception ex4)
-                {
-                    Logger.Warn(ex4, "下载配置信息失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                }
-                Loader.Progress = 0.6;
-                string text4;
-                try
-                {
-                    if (num3 <= num2 && FileUtils.Exists(ModBase.PathTemp + "Cache\\Notice.json"))
-                    {
-                        text4 = FileUtils.ReadAsString(ModBase.PathTemp + "Cache\\Notice.json", null, null);
-                    }
-                    else
-                    {
-                        text4 = ModNet.NetRequestByClientRetry("https://pcl2-server-1253424809.file.myqcloud.com/notice.json{CDN}", null, null, null, null, "*/*", null, true, null, false);
-                        FileUtils.Write(ModBase.PathTemp + "Cache\\Notice.json", text4, null);
-                    }
-                    Settings.Set("HintNotice", num3, null);
-                }
-                catch (Exception ex5)
-                {
-                    Logger.Warn(ex5, "下载 PCL 服务器公告失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    FileUtils.Delete(ModBase.PathTemp + "Cache\\Notice.json", false);
-                    return;
-                }
-                Loader.Progress = 0.9;
-                try
-                {
-                    try
-                    {
-                        foreach (JToken jtoken in ((IEnumerable<JToken>)text4.Replace("{UNIQUE}", ModBase.Identify).DeserializeJson()))
-                        {
-                            JObject jobject = (JObject)jtoken;
-                            int num5 = (int)Math.Round(ModBase.Val(jobject["id"] ?? 0));
-                            if (num5 > num2)
-                            {
-                                bool flag = true;
-                                try
-                                {
-                                    foreach (JToken jtoken2 in ((IEnumerable<JToken>)(jobject["requirements"] ?? new byte[0])))
-                                    {
-                                        JProperty jproperty = (JProperty)jtoken2;
-                                        if (!ModSecret.ServerRequirement(jproperty.Name, jproperty.Value))
-                                        {
-                                            flag = false;
-                                        }
-                                    }
-                                }
-                                finally
-                                {
-                                    IEnumerator<JToken> enumerator2 = default;
-                                    if (enumerator2 != null)
-                                    {
-                                        enumerator2.Dispose();
-                                    }
-                                }
-                                if (flag)
-                                {
-                                    int num6 = (int)(jobject["importantLevel"] ?? 2);
-                                    bool flag2 = (bool)(jobject["isUpdate"] ?? false);
-                                    Logger.Info(string.Format("重要等级 {0}，更新公告 {1}", num6, flag2), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                                    if (Settings.Get<int>(flag2 ? "SystemSystemUpdate" : "SystemSystemActivity", null) <= num6 && (!flag2 || !ModSecret.IsUpdating))
-                                    {
-                                        string text5 = (jobject["title"] ?? "公告").ToString();
-                                        string text6 = (jobject["description"] ?? "").ToString().Replace("\\n", "\r\n");
-                                        JArray jarray = (JArray)(jobject["buttons"] ?? new JArray());
-                                        int count = jarray.Count;
-                                        object obj = new object[0];
-                                        if (count > 0)
-                                        {
-                                            Logger.Info(string.Format("显示公告 {0}：{1}", num5, text6), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                                            int num7;
-                                            switch (count)
-                                            {
-                                            case 1:
-                                                num7 = ModMain.OurMsgBox(text6, text5, (jarray[0]["text"] ?? "确定").ToString(), "", "", false, true, true, null, null, null);
-                                                break;
-                                            case 2:
-                                                num7 = ModMain.OurMsgBox(text6, text5, (jarray[0]["text"] ?? "确定").ToString(), (jarray[1]["text"] ?? "确定").ToString(), "", false, true, false, null, null, null);
-                                                break;
-                                            case 3:
-                                                num7 = ModMain.OurMsgBox(text6, text5, (jarray[0]["text"] ?? "确定").ToString(), (jarray[1]["text"] ?? "确定").ToString(), (jarray[2]["text"] ?? "确定").ToString(), false, true, false, null, null, null);
-                                                break;
-                                            default:
-                                                Logger.Warn(string.Format("公告 {0} 的弹窗有 {1} 个按钮，无法显示", num5, count), LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                                                continue;
-                                            }
-                                            num7 = num7.Clamp(1, count);
-                                            obj = jarray[num7 - 1]["actions"] ?? new byte[0];
-                                        }
-                                        else
-                                        {
-                                            obj = jobject["actions"] ?? new byte[0];
-                                        }
-                                        try
-                                        {
-                                            foreach (object obj2 in ((IEnumerable)obj))
-                                            {
-                                                JProperty jproperty2 = (JProperty)obj2;
-                                                try
-                                                {
-                                                    string name = jproperty2.Name;
-                                                    if (Operators.CompareString(name, "copy", false) != 0)
-                                                    {
-                                                        if (Operators.CompareString(name, "website", false) != 0)
-                                                        {
-                                                            if (Operators.CompareString(name, "stop", false) != 0)
-                                                            {
-                                                                if (Operators.CompareString(name, "setup", false) != 0)
-                                                                {
-                                                                    if (Operators.CompareString(name, "update", false) != 0 && Operators.CompareString(name, "slientupdate", false) != 0)
-                                                                    {
-                                                                        throw new Exception("未知的行动支：" + jproperty2.Name + ", " + jproperty2.Value.ToString());
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    JObject jobject2 = (JObject)jproperty2.Value;
-                                                                    try
-                                                                    {
-                                                                        foreach (KeyValuePair<string, JToken> keyValuePair in jobject2)
-                                                                        {
-                                                                            Settings.Set(keyValuePair.Key, keyValuePair.Value.ToString(), null);
-                                                                        }
-                                                                        continue;
-                                                                    }
-                                                                    finally
-                                                                    {
-                                                                        IEnumerator<KeyValuePair<string, JToken>> enumerator4 = default;
-                                                                        if (enumerator4 != null)
-                                                                        {
-                                                                            enumerator4.Dispose();
-                                                                        }
-                                                                    }
-                                                                }
-                                                                JObject jobject3 = (JObject)jproperty2.Value;
-                                                                bool flag3 = Operators.CompareString(jproperty2.Name, "slientupdate", false) == 0;
-                                                                if (!ModSecret.HasUpdatePermission)
-                                                                {
-                                                                    if (!flag3)
-                                                                    {
-                                                                        ModSecret.InputPotatoCode(true);
-                                                                    }
-                                                                    if (!ModSecret.HasUpdatePermission)
-                                                                    {
-                                                                        continue;
-                                                                    }
-                                                                }
-                                                                ModSecret.UpdateStart(flag3, null);
-                                                            }
-                                                            else
-                                                            {
-                                                                ModMain.FrmMain.EndProgram(false);
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            ModBase.OpenWebsite(jproperty2.Value.ToString());
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        ModBase.ClipboardSet(jproperty2.Value.ToString(), true);
-                                                    }
-                                                }
-                                                catch (Exception ex6)
-                                                {
-                                                    Logger.Error(ex6, string.Format("执行 PCL 服务器公告动作失败（{0}, {1}）", jproperty2.Name, jproperty2.Value), LogBehavior.Toast, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                                                }
-                                            }
-                                        }
-                                        finally
-                                        {
-                                            IEnumerator enumerator3 = default;
-                                            if (enumerator3 is IDisposable)
-                                            {
-                                                (enumerator3 as IDisposable).Dispose();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        IEnumerator<JToken> enumerator = default;
-                        if (enumerator != null)
-                        {
-                            enumerator.Dispose();
-                        }
-                    }
-                }
-                catch (Exception ex7)
-                {
-                    Logger.Warn(text4, LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    Logger.Error(ex7, string.Format("读取 PCL 服务器公告失败（{0}）", text4.Length), LogBehavior.Toast, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    FileUtils.Delete(ModBase.PathTemp + "Cache\\Notice.json", false);
-                }
+                Logger.Warn(ex, "获取联机配置失败，使用本地配置", LogBehavior.ToastIfDebug);
             }
         }
 
-        private static bool ServerRequirement(string Name, JToken Value)
-        {
-            checked
-            {
-                bool flag;
-                try
-                {
-                    uint num = PrivateImplementationDetails_.ComputeStringHash(Name);
-                    if (num <= 2207725236U)
-                    {
-                        if (num <= 1143669093U)
-                        {
-                            if (num != 127006290U)
-                            {
-                                if (num != 233440242U)
-                                {
-                                    if (num == 1143669093U)
-                                    {
-                                        if (Operators.CompareString(Name, "setupboolean =", false) == 0)
-                                        {
-                                            return Settings.Get<bool>(((JProperty)Value).Name, null) == ((JProperty)Value).Value.ToObject<bool>();
-                                        }
-                                    }
-                                }
-                                else if (Operators.CompareString(Name, "unlockedtheme =", false) == 0)
-                                {
-                                    return ModSecret.ThemeCheckOne((int)Math.Round(ModBase.Val(Value)));
-                                }
-                            }
-                            else if (Operators.CompareString(Name, "versionbranch <=", false) == 0)
-                            {
-                                return ModBase.Val(0) <= ModBase.Val(Value);
-                            }
-                        }
-                        else if (num <= 1834020325U)
-                        {
-                            if (num != 1699755989U)
-                            {
-                                if (num == 1834020325U)
-                                {
-                                    if (Operators.CompareString(Name, "setupinteger >=", false) == 0)
-                                    {
-                                        return (double)Settings.Get<int>(((JProperty)Value).Name, null) >= ModBase.Val(((JProperty)Value).Value);
-                                    }
-                                }
-                            }
-                            else if (Operators.CompareString(Name, "opencount >=", false) == 0)
-                            {
-                                return (double)Settings.Get<int>("SystemCount", null) >= ModBase.Val(Value);
-                            }
-                        }
-                        else if (num != 1931416207U)
-                        {
-                            if (num == 2207725236U)
-                            {
-                                if (Operators.CompareString(Name, "versionbranch >=", false) == 0)
-                                {
-                                    return ModBase.Val(0) >= ModBase.Val(Value);
-                                }
-                            }
-                        }
-                        else if (Operators.CompareString(Name, "debug =", false) == 0)
-                        {
-                            return Operators.CompareString(ModBase.ModeDebug.ToString().Lower(), Value.ToString().Lower(), false) == 0;
-                        }
-                    }
-                    else if (num <= 3063258025U)
-                    {
-                        if (num != 2410018677U)
-                        {
-                            if (num != 2561636181U)
-                            {
-                                if (num == 3063258025U)
-                                {
-                                    if (Operators.CompareString(Name, "unlockedtheme !=", false) == 0)
-                                    {
-                                        return !ModSecret.ThemeCheckOne((int)Math.Round(ModBase.Val(Value)));
-                                    }
-                                }
-                            }
-                            else if (Operators.CompareString(Name, "uniqueaddress =", false) == 0)
-                            {
-                                return Operators.CompareString(ModBase.Identify, Value.ToString(), false) == 0;
-                            }
-                        }
-                        else if (Operators.CompareString(Name, "d10000 <=", false) == 0)
-                        {
-                            return (double)ModBase.RandomInteger(1, 10000) <= ModBase.Val(Value);
-                        }
-                    }
-                    else if (num <= 3317911237U)
-                    {
-                        if (num != 3250506571U)
-                        {
-                            if (num == 3317911237U)
-                            {
-                                if (Operators.CompareString(Name, "versioncode <=", false) == 0)
-                                {
-                                    return 414.0 <= ModBase.Val(Value);
-                                }
-                            }
-                        }
-                        else if (Operators.CompareString(Name, "versioncode >=", false) == 0)
-                        {
-                            return 414.0 >= ModBase.Val(Value);
-                        }
-                    }
-                    else if (num != 3779783387U)
-                    {
-                        if (num == 3914047723U)
-                        {
-                            if (Operators.CompareString(Name, "setupinteger <=", false) == 0)
-                            {
-                                return (double)Settings.Get<int>(((JProperty)Value).Name, null) <= ModBase.Val(((JProperty)Value).Value);
-                            }
-                        }
-                    }
-                    else if (Operators.CompareString(Name, "opencount <=", false) == 0)
-                    {
-                        return (double)Settings.Get<int>("SystemCount", null) <= ModBase.Val(Value);
-                    }
-                    Logger.Warn(string.Format("未知的条件支：{0}, {1}", Name, Value), LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    flag = false;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(string.Format("判断分支条件失败：{0}, {1}", Name, Value), LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    flag = false;
-                }
-                return flag;
-            }
-        }
+
 
         public static DonationRank CurrentRank
         {
@@ -1305,7 +736,6 @@ namespace PCL
 
         public const string OAuthClientId = "fe72edc2-3a6f-4280-90e8-e2beb64ce7e1";
 
-        public const string ClsBaseUrl = "https://ap-shanghai.cls.tencentcs.com/track?topic_id=pcl-remote-1253424809";
 
         public const bool RestrictMcDownload = true;
 
@@ -1363,13 +793,11 @@ namespace PCL
 
         private static int ColorHueDelta = 1;
 
-        private static bool IsUpdating = false;
 
         internal static bool IsUpdateWaitingRestart = false;
 
         private static bool IsUpdateRestartWaitingTasks = false;
 
-        private static string UpdateMark = "EmptyMark********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************";
 
         public static JObject ServerConfig;
 
@@ -1382,11 +810,8 @@ namespace PCL
 
         private const string EcdsaPublicKey = "RUNTMSAAAAC4QTUNAewh23Q4Q6koHkyIrDIIZUSbua23sf2DiZmIRwSzadISDRyTVTbuWniH3KR7rKj8XBsabms1be6i3c+S";
 
-        private static bool _STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate;
 
-        private static StaticLocalInitFlag _STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate_Init;
 
-        private static bool _STATIC_UpdateStart_0212151280E91E_IsSilentUpdate;
 
         [CompilerGenerated]
         [Serializable]
@@ -1533,57 +958,12 @@ namespace PCL
                 return d;
             }
 
-            internal void _Lambda___40_0()
-            {
-                try
-                {
-                    ModMain.Hint("正在检查更新，请稍候！", ModMain.HintType.Blue, true);
-                    ModSecret.ServerLoader.WaitForExit(null, null, true, default(CancellationToken), null);
-                    bool? flag = PageSetupSystem.IsLauncherNewest();
-                    if (flag == null)
-                    {
-                        ModMain.Hint("连接 PCL 服务器失败，请确认系统时间是否准确，尝试将 PCL 加入杀毒软件或防火墙白名单，然后重启 PCL！", ModMain.HintType.Red, true);
-                    }
-                    else if (flag.GetValueOrDefault())
-                    {
-                        ModMain.Hint(string.Format("已经是最新{0} {1}，不需要更新啦，可以直接使用！", "快照版", "2.99.0.0"), ModMain.HintType.Green, true);
-                    }
-                    else
-                    {
-                        if (!ModSecret.HasUpdatePermission)
-                        {
-                            ModSecret.InputPotatoCode(true);
-                            if (!ModSecret.HasUpdatePermission)
-                            {
-                                return;
-                            }
-                        }
-                        else if (ModMain.OurMsgBox("发现启动器更新，是否立即下载？", "发现更新！", "更新！冲！", "取消", "", false, true, false, null, null, null) == 2)
-                        {
-                            return;
-                        }
-                        ModSecret.UpdateStart(false, null);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex, "尝试手动开始更新失败", LogBehavior.AlertThenFeedback, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                }
-                finally
-                {
-                    ModSecret._STATIC_UpdateCheckByButton_001_IsUiCheckingUpdate = false;
-                }
-            }
 
             internal string _Lambda___43_1(string u)
             {
                 return ModMain.ArgumentReplace(u, new Func<string, string>(WebUtility.HtmlEncode), true);
             }
 
-            internal string _Lambda___47_0(JToken t)
-            {
-                return t.ToString();
-            }
 
             internal void _Lambda___62_0()
             {
@@ -1604,11 +984,9 @@ namespace PCL
 
             public static Action _I36_0;
 
-            public static Action _I40_0;
 
             public static Func<string, string> _I43_1;
 
-            public static Func<JToken, string> _I47_0;
 
             public static Action _I62_0;
 
@@ -1635,7 +1013,7 @@ namespace PCL
                         int num = Settings.Get<int>("UiLauncherTheme", null);
                         if (!ModSecret.ThemeCheckOne(num))
                         {
-                            Logger.Warn(string.Format("检测到尚未解锁的主题：{0}，已重置为默认主题", num), LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
+                            Logger.Warn(string.Format("检测到无效主题：{0}，已重置为默认主题", num), LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
                             Settings.Set("UiLauncherTheme", 0, null);
                         }
                         if (this._VB_Local_EffectSetup && ModMain.FrmSetupUI != null)
@@ -1746,207 +1124,7 @@ namespace PCL
             public bool _VB_Local_EffectSetup;
         }
 
-        [CompilerGenerated]
-        private sealed class _Closure___43_0
-        {
-            public _Closure___43_0(ModSecret._Closure___43_0 arg0)
-            {
-                if (arg0 != null)
-                {
-                    this._VB_Local_UrlsOverride = arg0._VB_Local_UrlsOverride;
-                }
-            }
 
-            public IEnumerable<string> _VB_Local_UrlsOverride;
-        }
-
-        [CompilerGenerated]
-        private sealed class _Closure___43_1
-        {
-            public _Closure___43_1(ModSecret._Closure___43_1 arg0)
-            {
-                if (arg0 != null)
-                {
-                    this._VB_Local_Urls = arg0._VB_Local_Urls;
-                    this._VB_Local_Extension = arg0._VB_Local_Extension;
-                    this._VB_Local_LocalPath = arg0._VB_Local_LocalPath;
-                    this._VB_Local_Loader = arg0._VB_Local_Loader;
-                }
-            }
-
-            internal void _Lambda___0(ModLoader.LoaderTask<string, List<ModNet.NetFile>> Task)
-            {
-                if (ModSecret.ServerLoader.State == ModBase.LoadState.Loading)
-                {
-                    ModSecret.ServerLoader.WaitForExit(null, null, false, default(CancellationToken), null);
-                }
-                if (this._VB_NonLocal__VB_Closure_2._VB_Local_UrlsOverride != null)
-                {
-                    this._VB_Local_Urls = this._VB_NonLocal__VB_Closure_2._VB_Local_UrlsOverride.ToList<string>();
-                }
-                else
-                {
-                    JObject serverConfig = ModSecret.ServerConfig;
-                    bool flag;
-                    if (serverConfig == null)
-                    {
-                        flag = null != null;
-                    }
-                    else
-                    {
-                        JToken jtoken = serverConfig["Update"];
-                        flag = ((jtoken != null) ? jtoken[ModBase.BuildTypes.Snapshot.ToString()] : null) != null;
-                    }
-                    if (flag)
-                    {
-                        JObject jobject = (JObject)ModSecret.ServerConfig["Update"][ModBase.BuildTypes.Snapshot.ToString()];
-                        if (jobject.ContainsKey("PatchUrls") && ModSecret.UpdateMark.StartsWithF("Empty", false))
-                        {
-                            this._VB_Local_Urls = jobject["PatchUrls"].ToObject<List<string>>();
-                        }
-                        else if (jobject.ContainsKey("DownloadUrls"))
-                        {
-                            this._VB_Local_Urls = jobject["DownloadUrls"].ToObject<List<string>>();
-                        }
-                    }
-                }
-                if (this._VB_Local_Urls == null || !this._VB_Local_Urls.Any<string>())
-                {
-                    Logger.Error("更新失败：服务器没有提供有效的更新包下载链接，或无法连接到服务器！", LogBehavior.Alert, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    ModSecret.IsUpdating = false;
-                    return;
-                }
-                this._VB_Local_Urls = this._VB_Local_Urls.Select<string, string>((ModSecret._Closure___._I43_1 == null) ? (ModSecret._Closure___._I43_1 = new Func<string, string>(ModSecret._Closure___._I._Lambda___43_1)) : ModSecret._Closure___._I43_1).ToList<string>();
-                this._VB_Local_Extension = "." + PathUtils.GetExtension(this._VB_Local_Urls.First<string>().BeforeLast("{CDN}", false));
-                this._VB_Local_LocalPath = string.Format("{0}{1}.{2}{3}", new object[]
-                {
-                    ModMain.RequestTaskTempFolder(false),
-                    "2.99.0.0",
-                    0,
-                    this._VB_Local_Extension
-                });
-                Logger.Info(string.Format("更新开始，静默：{0}，扩展名：{1}，下载目标：{2}，URL：{3}", new object[]
-                {
-                    ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate,
-                    this._VB_Local_Extension,
-                    this._VB_Local_LocalPath,
-                    this._VB_Local_Urls.Join("，")
-                }), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                Task.Output = new ModNet.NetFile[]
-                {
-                    new ModNet.NetFile(this._VB_Local_Urls, this._VB_Local_LocalPath, null, false)
-                }.ToList<ModNet.NetFile>();
-            }
-
-            internal void _Lambda___R1(ModLoader.LoaderTask<string, int> a0)
-            {
-                this._Lambda___2();
-            }
-
-            internal void _Lambda___2()
-            {
-                string text = Paths.Base + "PCL\\OpenPCL.exe";
-                if (FileUtils.Exists(text))
-                {
-                    FileUtils.Delete(text, false);
-                    Logger.Info(string.Format("已清理已存在的更新文件：{0}", text), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                }
-                checked
-                {
-                    if (Operators.CompareString(this._VB_Local_Extension, ".zip", false) == 0)
-                    {
-                        Logger.Info(string.Format("解压更新文件：{0}", this._VB_Local_LocalPath), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                        FileUtils.ExtractToDirectory(this._VB_Local_LocalPath, Paths.Base + "PCL\\", default(CancellationToken), null);
-                        byte[] array = FileUtils.ReadAsBytes(text, null);
-                        List<byte> list = new List<byte>();
-                        for (int i = array.Length - 1; i >= 0; i += -1)
-                        {
-                            byte b = (byte)(byte.MaxValue - array[i]);
-                            list.Add((b == 0) ? byte.MaxValue : ((b == byte.MaxValue) ? (byte)0 : b));
-                        }
-                        array = list.ToArray();
-                        FileUtils.Write(text, array);
-                    }
-                    else
-                    {
-                        Logger.Info(string.Format("应用补丁文件：{0} + {1} → {2}PCL\\OpenPCL.exe", ModBase.PathExe, this._VB_Local_LocalPath, Paths.Base), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                        MsDelta.Apply(ModBase.PathExe, this._VB_Local_LocalPath, string.Format("{0}PCL\\OpenPCL.exe", Paths.Base));
-                    }
-                    if (ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate)
-                    {
-                        ModSecret.IsUpdateWaitingRestart = true;
-                        return;
-                    }
-                    if (ModLaunch.McLaunchLoader.State == ModBase.LoadState.Loading)
-                    {
-                        ModMain.Hint("更新已准备就绪，PCL 将在游戏启动完成后重启！", ModMain.HintType.Green, true);
-                        while (ModLaunch.McLaunchLoader.State == ModBase.LoadState.Loading)
-                        {
-                            Thread.Sleep(10);
-                        }
-                    }
-                    ModSecret.UpdateRestart(true);
-                }
-            }
-
-            internal void _Lambda___R2(ModLoader.LoaderBase a0)
-            {
-                this._Lambda___3();
-            }
-
-            internal void _Lambda___3()
-            {
-                if (this._VB_Local_Loader.State == ModBase.LoadState.Failed)
-                {
-                    if (ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate)
-                    {
-                        Logger.Warn(this._VB_Local_Loader.Error, "启动器静默更新失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    }
-                    else if (this._VB_Local_Loader.Error.GetDisplay(false).Contains("(403)"))
-                    {
-                        ModMain.OurMsgBox("你的系统时间可能并不准确，导致下载验证未通过。\r\n请在校对、修改系统时间后再次尝试更新。", "启动器更新失败", "确定", "", "", false, true, false, null, null, null);
-                    }
-                    else if (this._VB_Local_Loader.Error.GetDisplay(false).Contains("(404)"))
-                    {
-                        ModMain.OurMsgBox(string.Format("未找到更新包。可能的原因有：{0}- 你所使用的 PCL 不是官方版本{1}- 服务器异常", "\r\n", "\r\n"), "启动器更新失败", "确定", "", "", false, true, false, null, null, null);
-                    }
-                    else if (this._VB_Local_Loader.Error is FileNotFoundException)
-                    {
-                        if (ModMain.OurMsgBox(string.Format("由于被 Windows 安全中心拦截，或者存在权限问题，导致 PCL 无法更新。{0}请将 PCL 所在文件夹加入白名单！", "\r\n"), "更新失败", "查看帮助", "确定", "", true, true, false, null, null, null) == 1)
-                        {
-                            CustomEvent.Raise(CustomEvent.EventType.打开帮助, "启动器/Microsoft Defender 添加排除项.json");
-                        }
-                    }
-                    else
-                    {
-                        Logger.Error(this._VB_Local_Loader.Error, "启动器更新失败", LogBehavior.AlertThenFeedback, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModSecret.vb");
-                    }
-                }
-                if (this._VB_Local_Loader.State == ModBase.LoadState.Finished || this._VB_Local_Loader.State == ModBase.LoadState.Failed || this._VB_Local_Loader.State == ModBase.LoadState.Canceled)
-                {
-                    ModSecret.IsUpdating = false;
-                }
-            }
-
-            internal void _Lambda___4()
-            {
-                if (!ModSecret._STATIC_UpdateStart_0212151280E91E_IsSilentUpdate)
-                {
-                    ModLoader.LoaderTaskbarAdd<string>(this._VB_Local_Loader);
-                    ModMain.FrmMain.BtnExtraDownload.ShowRefresh();
-                }
-            }
-
-            public List<string> _VB_Local_Urls;
-
-            public string _VB_Local_Extension;
-
-            public string _VB_Local_LocalPath;
-
-            public ModLoader.LoaderCombo<string> _VB_Local_Loader;
-
-            public ModSecret._Closure___43_0 _VB_NonLocal__VB_Closure_2;
-        }
 
         [CompilerGenerated]
         private sealed class _Closure___46_0

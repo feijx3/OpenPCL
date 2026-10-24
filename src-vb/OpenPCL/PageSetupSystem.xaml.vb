@@ -25,8 +25,6 @@ Namespace PCL
 
         Private Sub PageSetupSystem_Loaded(sender As Object, e As RoutedEventArgs)
             Me.PanBack.ScrollToHome()
-            Me.PanDonate.Visibility = Visibility.Visible
-            Me.ItemSystemUpdateDownload.Content = "在有新版本时自动下载（更新快照版前需要先输入土豆码）"
             If Me.$STATIC$PageSetupSystem_Loaded$20211C128141$IsLoaded$Init Is Nothing Then
                 Interlocked.CompareExchange(Of StaticLocalInitFlag)(Me.$STATIC$PageSetupSystem_Loaded$20211C128141$IsLoaded$Init, New StaticLocalInitFlag(), Nothing)
             End If
@@ -126,13 +124,7 @@ Namespace PCL
             End If
         End Sub
 
-        Private Sub BtnSystemIdentify_Click(sender As Object, e As MouseButtonEventArgs)
-            PageOtherAbout.CopyIdentify()
-        End Sub
 
-        Private Sub BtnSystemUnlock_Click(sender As Object, e As MouseButtonEventArgs)
-            ModSecret.InputPotatoCode(False)
-        End Sub
 
         Private Sub CheckDebugMode_Change()
             If ModAnimation.AniControlEnabled = 0 Then
@@ -140,45 +132,15 @@ Namespace PCL
             End If
         End Sub
 
-        Private Sub ComboSystemActivity_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            If ModAnimation.AniControlEnabled = 0 AndAlso Me.ComboSystemActivity.SelectedIndex = 2 AndAlso ModMain.OurMsgBox("若选择此项，即使在将来出现严重问题时，你也无法获取相关通知。" & vbCrLf & "例如，如果发现某个版本游戏存在严重 Bug，你可能就会因为无法得到通知而导致无法预知的后果。" & vbCrLf & vbCrLf & "一般选择 仅在有重要通知时显示公告 就可以让你尽量不受打扰了。" & vbCrLf & "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", "", True, True, False, Nothing, Nothing, Nothing) = 2 AndAlso e.RemovedItems.Count > 0 Then
-                Me.ComboSystemActivity.SelectedItem = RuntimeHelpers.GetObjectValue(e.RemovedItems(0))
-            End If
-        End Sub
 
-        Private Sub ComboSystemUpdate_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            If ModAnimation.AniControlEnabled = 0 AndAlso Me.ComboSystemUpdate.SelectedIndex = 3 AndAlso ModMain.OurMsgBox("若选择此项，即使在启动器将来出现严重问题时，你也无法获取更新并获得修复。" & vbCrLf & "例如，如果官方修改了登录方式，从而导致现有启动器无法登录，你可能就会因为无法更新而无法开始游戏。" & vbCrLf & vbCrLf & "一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。" & vbCrLf & "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", "", True, True, False, Nothing, Nothing, Nothing) = 2 AndAlso e.RemovedItems.Count > 0 Then
-                Me.ComboSystemUpdate.SelectedItem = RuntimeHelpers.GetObjectValue(e.RemovedItems(0))
-            End If
-        End Sub
 
-        Private Sub BtnSystemUpdate_Click(sender As Object, e As EventArgs)
-            ModSecret.UpdateCheckByButton()
-        End Sub
 
         Public Shared Function IsLauncherNewest() As Boolean?
-            Dim flag As Boolean?
-            Try
-                Dim text As String = If(FileUtils.TryReadAsString(ModBase.PathTemp + "Cache\Notice.cfg", Nothing, Nothing), "")
-                If text.Split("|", False).Count() < 3 Then
-                    flag = Nothing
-                Else
-                    flag = New Boolean?(Conversions.ToDouble(text.Split("|", False)(1)) <= 414.0)
-                End If
-            Catch ex As Exception
-                Logger.[Error](ex, "确认启动器更新失败", LogBehavior.AlertThenFeedback, "E:\Projects\PCL\本体代码\OpenPCL\Pages\PageSetup\PageSetupSystem.xaml.vb")
-                flag = Nothing
-            End Try
-            Return flag
+            ' 此构建不再与上游启动器比较版本。
+            Return Nothing
         End Function
 
-        Private Sub BtnSystemSettingExp_Click(sender As Object, e As MouseButtonEventArgs)
-            ModMain.Hint("该功能尚在开发中！", ModMain.HintType.Blue, True)
-        End Sub
 
-        Private Sub BtnSystemSettingImp_Click(sender As Object, e As MouseButtonEventArgs)
-            ModMain.Hint("该功能尚在开发中！", ModMain.HintType.Blue, True)
-        End Sub
 
         Friend Overridable Property PanBack As OurScrollViewer
 
@@ -223,160 +185,23 @@ Namespace PCL
 
         Friend Overridable Property CheckHelpChinese As OurCheckBox
 
-        Friend Overridable Property ComboSystemUpdate As OurComboBox
-            <CompilerGenerated()>
-            Get
-                Return Me._ComboSystemUpdate
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurComboBox)
-                Dim selectionChangedEventHandler As SelectionChangedEventHandler = AddressOf Me.ComboSystemUpdate_SelectionChanged
-                Dim myComboBox As OurComboBox = Me._ComboSystemUpdate
-                If myComboBox IsNot Nothing Then
-                    RemoveHandler myComboBox.SelectionChanged, selectionChangedEventHandler
-                End If
-                Me._ComboSystemUpdate = value
-                myComboBox = Me._ComboSystemUpdate
-                If myComboBox IsNot Nothing Then
-                    AddHandler myComboBox.SelectionChanged, selectionChangedEventHandler
-                End If
-            End Set
-        End Property
 
-        Friend Overridable Property ItemSystemUpdateDownload As OurComboBoxItem
 
-        Friend Overridable Property ComboSystemActivity As OurComboBox
-            <CompilerGenerated()>
-            Get
-                Return Me._ComboSystemActivity
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurComboBox)
-                Dim selectionChangedEventHandler As SelectionChangedEventHandler = AddressOf Me.ComboSystemActivity_SelectionChanged
-                Dim myComboBox As OurComboBox = Me._ComboSystemActivity
-                If myComboBox IsNot Nothing Then
-                    RemoveHandler myComboBox.SelectionChanged, selectionChangedEventHandler
-                End If
-                Me._ComboSystemActivity = value
-                myComboBox = Me._ComboSystemActivity
-                If myComboBox IsNot Nothing Then
-                    AddHandler myComboBox.SelectionChanged, selectionChangedEventHandler
-                End If
-            End Set
-        End Property
 
-        Friend Overridable Property TextSystemCache As OurTextBox
 
-        Friend Overridable Property CheckSystemTelemetry As OurCheckBox
 
-        Friend Overridable Property BtnSystemUpdate As OurButton
-            <CompilerGenerated()>
-            Get
-                Return Me._BtnSystemUpdate
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurButton)
-                Dim clickEventHandler As OurButton.ClickEventHandler = AddressOf Me.BtnSystemUpdate_Click
-                Dim myButton As OurButton = Me._BtnSystemUpdate
-                If myButton IsNot Nothing Then
-                    RemoveHandler myButton.Click, clickEventHandler
-                End If
-                Me._BtnSystemUpdate = value
-                myButton = Me._BtnSystemUpdate
-                If myButton IsNot Nothing Then
-                    AddHandler myButton.Click, clickEventHandler
-                End If
-            End Set
-        End Property
 
-        Friend Overridable Property BtnSystemSettingExp As OurButton
-            <CompilerGenerated()>
-            Get
-                Return Me._BtnSystemSettingExp
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurButton)
-                Dim clickEventHandler As OurButton.ClickEventHandler = AddressOf Me.BtnSystemSettingExp_Click
-                Dim myButton As OurButton = Me._BtnSystemSettingExp
-                If myButton IsNot Nothing Then
-                    RemoveHandler myButton.Click, clickEventHandler
-                End If
-                Me._BtnSystemSettingExp = value
-                myButton = Me._BtnSystemSettingExp
-                If myButton IsNot Nothing Then
-                    AddHandler myButton.Click, clickEventHandler
-                End If
-            End Set
-        End Property
 
-        Friend Overridable Property BtnSystemSettingImp As OurButton
-            <CompilerGenerated()>
-            Get
-                Return Me._BtnSystemSettingImp
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurButton)
-                Dim clickEventHandler As OurButton.ClickEventHandler = AddressOf Me.BtnSystemSettingImp_Click
-                Dim myButton As OurButton = Me._BtnSystemSettingImp
-                If myButton IsNot Nothing Then
-                    RemoveHandler myButton.Click, clickEventHandler
-                End If
-                Me._BtnSystemSettingImp = value
-                myButton = Me._BtnSystemSettingImp
-                If myButton IsNot Nothing Then
-                    AddHandler myButton.Click, clickEventHandler
-                End If
-            End Set
-        End Property
 
-        Friend Overridable Property PanDonate As Grid
 
-        Friend Overridable Property BtnSystemIdentify As OurButton
-            <CompilerGenerated()>
-            Get
-                Return Me._BtnSystemIdentify
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurButton)
-                Dim clickEventHandler As OurButton.ClickEventHandler = AddressOf Me.BtnSystemIdentify_Click
-                Dim myButton As OurButton = Me._BtnSystemIdentify
-                If myButton IsNot Nothing Then
-                    RemoveHandler myButton.Click, clickEventHandler
-                End If
-                Me._BtnSystemIdentify = value
-                myButton = Me._BtnSystemIdentify
-                If myButton IsNot Nothing Then
-                    AddHandler myButton.Click, clickEventHandler
-                End If
-            End Set
-        End Property
 
-        Friend Overridable Property BtnSystemUnlock As OurButton
-            <CompilerGenerated()>
-            Get
-                Return Me._BtnSystemUnlock
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurButton)
-                Dim clickEventHandler As OurButton.ClickEventHandler = AddressOf Me.BtnSystemUnlock_Click
-                Dim myButton As OurButton = Me._BtnSystemUnlock
-                If myButton IsNot Nothing Then
-                    RemoveHandler myButton.Click, clickEventHandler
-                End If
-                Me._BtnSystemUnlock = value
-                myButton = Me._BtnSystemUnlock
-                If myButton IsNot Nothing Then
-                    AddHandler myButton.Click, clickEventHandler
-                End If
-            End Set
-        End Property
+
+
+
+
+
+
+
 
         Friend Overridable Property CardDebug As OurCard
 

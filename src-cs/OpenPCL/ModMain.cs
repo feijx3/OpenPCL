@@ -1168,13 +1168,7 @@ namespace PCL
 
         public static void Telemetry(string Event, params string[] Datas)
         {
-            ModMain._Closure___78_0 CS_locals1 = new ModMain._Closure___78_0(null);
-            CS_locals1._VB_Local_Event = Event;
-            CS_locals1._VB_Local_Datas = Datas;
-            if (Settings.Get<bool>("SystemSystemTelemetry", null) && "https://ap-shanghai.cls.tencentcs.com/track?topic_id=pcl-remote-1253424809".StartsWithF("http", false))
-            {
-                ModBase.RunInNewThread(new Action(CS_locals1._Lambda___0), "Telemetry", ThreadPriority.Lowest);
-            }
+            // 保留调用接口以兼容现有事件，禁用数据上报。
         }
 
         private static void TimerMain()
@@ -1888,50 +1882,5 @@ namespace PCL
             public Func<string, string> _VB_Local_EscapeHandler;
         }
 
-        [CompilerGenerated]
-        private sealed class _Closure___78_0
-        {
-            public _Closure___78_0(ModMain._Closure___78_0 arg0)
-            {
-                if (arg0 != null)
-                {
-                    this._VB_Local_Event = arg0._VB_Local_Event;
-                    this._VB_Local_Datas = arg0._VB_Local_Datas;
-                }
-            }
-
-            internal void _Lambda___0()
-            {
-                checked
-                {
-                    try
-                    {
-                        Logger.Info(string.Format("匿名数据上报：{0}", this._VB_Local_Event), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModMain.vb");
-                        string text = string.Format("{0}&Event={1}", "https://ap-shanghai.cls.tencentcs.com/track?topic_id=pcl-remote-1253424809", StringUtils.UrlEscape(this._VB_Local_Event));
-                        int num = this._VB_Local_Datas.Length - 1;
-                        for (int i = 0; i <= num; i += 2)
-                        {
-                            text = string.Concat(new string[]
-                            {
-                                text,
-                                "&",
-                                StringUtils.UrlEscape(this._VB_Local_Datas[i]),
-                                "=",
-                                StringUtils.UrlEscape(this._VB_Local_Datas[i + 1].ReplaceLineEndings("\n", true))
-                            });
-                        }
-                        ModNet.NetRequestByClient(text, null, null, null, "*/*", 25000, null, false, null, false, false);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Warn(ex, "匿名数据上报失败", LogBehavior.ToastIfDebug, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\ModMain.vb");
-                    }
-                }
-            }
-
-            public string _VB_Local_Event;
-
-            public string[] _VB_Local_Datas;
-        }
     }
 }

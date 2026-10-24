@@ -399,7 +399,7 @@ Namespace PCL
                             Me.PageState = OurPageRight.PageStates.ContentExit
                             Return
                         End If
-                        If pageState2 - OurPageRight.PageStates.ContentEnter <= 1 Then
+                        If pageState2 = OurPageRight.PageStates.ContentEnter OrElse pageState2 = OurPageRight.PageStates.ContentStay Then
                             Me.PageState = OurPageRight.PageStates.ContentExit
                             Me.TriggerExitAnimation(New FrameworkElement() { Me.PanContent })
                             Return

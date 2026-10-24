@@ -44,7 +44,7 @@ namespace PCL
                     ModMain.OurMsgBox(text2, "错误", "确定", "", "", true, true, false, null, null, null);
                     break;
                 case LogBehavior.AlertThenFeedback:
-                    if (PageSetupSystem.IsLauncherNewest().GetValueOrDefault())
+                    if (PageSetupSystem.IsLauncherNewest().GetValueOrDefault(true))
                     {
                         if (ModMain.OurMsgBox(text2 + "\r\n\r\n是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", "错误", "反馈", "取消", "", true, true, false, null, null, null) == 1)
                         {
@@ -87,7 +87,7 @@ namespace PCL
                     if (this._STATIC_HandleBehavior_2041EE1181E91280CD_FirstTrigger)
                     {
                         this._STATIC_HandleBehavior_2041EE1181E91280CD_FirstTrigger = false;
-                        if (PageSetupSystem.IsLauncherNewest().GetValueOrDefault())
+                        if (PageSetupSystem.IsLauncherNewest().GetValueOrDefault(true))
                         {
                             if (Interaction.MsgBox(text2 + "\r\n\r\n是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.YesNo | MsgBoxStyle.Critical, "错误") == MsgBoxResult.Yes)
                             {

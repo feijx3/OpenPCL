@@ -1191,7 +1191,7 @@ namespace PCL
                 ResourceTypes type = this._VB_Local_Request.Type;
                 if (type <= ResourceTypes.ResourcePack)
                 {
-                    if (type - ResourceTypes.Mod <= 1)
+                    if (type == ResourceTypes.Mod || type == ResourceTypes.ModPack)
                     {
                         return (double)((Project.Platform == ResourcePlatforms.CurseForge) ? 1 : 5);
                     }

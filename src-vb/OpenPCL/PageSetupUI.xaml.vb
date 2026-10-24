@@ -89,14 +89,7 @@ Namespace PCL
             If Not Me.$STATIC$PageSetupUI_Loaded$20211C128141$Reloaded Then
                 Me.$STATIC$PageSetupUI_Loaded$20211C128141$Reloaded = True
                 Me.SliderLoad()
-                If Not Me.RadioLauncherTheme8.IsEnabled Then
-                    Me.LabLauncherTheme8Copy.ToolTip = String.Format("累积赞助达到 ¥23.33 后，在爱发电私信发送【土豆 {0}】以解锁。", ModBase.Identify) + vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
-                End If
-                Me.RadioLauncherTheme8.ToolTip = String.Format("累积赞助达到 ¥23.33 后，在爱发电私信发送【土豆 {0}】以解锁", ModBase.Identify)
-                If Not Me.RadioLauncherTheme9.IsEnabled Then
-                    Me.LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
-                End If
-                Me.RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
+
             End If
         End Sub
 
@@ -474,13 +467,9 @@ Namespace PCL
             End If
         End Sub
 
-        Private Sub LabLauncherTheme8Copy_MouseRightButtonUp()
-            ModBase.OpenWebsite("https://meloong.com/afd/a/LTCat")
-        End Sub
 
-        Private Sub LabLauncherTheme9Copy_MouseRightButtonUp()
-            PageOtherLeft.TryFeedback()
-        End Sub
+
+
 
         Private Sub RadioLauncherTheme14_Change(sender As Object, e As ModBase.RouteEventArgs)
             If Me.RadioLauncherTheme14.Checked Then
@@ -942,96 +931,12 @@ Namespace PCL
         Friend Overridable Property RadioLauncherTheme13 As OurRadioBox
 
         Friend Overridable Property RadioLauncherTheme8 As OurRadioBox
-            <CompilerGenerated()>
-            Get
-                Return Me._RadioLauncherTheme8
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurRadioBox)
-                Dim mouseButtonEventHandler As MouseButtonEventHandler = Sub(a0 As Object, a1 As MouseButtonEventArgs)
-                    Me.LabLauncherTheme8Copy_MouseRightButtonUp()
-                End Sub
-                Dim myRadioBox As OurRadioBox = Me._RadioLauncherTheme8
-                If myRadioBox IsNot Nothing Then
-                    RemoveHandler myRadioBox.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-                Me._RadioLauncherTheme8 = value
-                myRadioBox = Me._RadioLauncherTheme8
-                If myRadioBox IsNot Nothing Then
-                    AddHandler myRadioBox.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-            End Set
-        End Property
 
         Friend Overridable Property LabLauncherTheme8Copy As TextBlock
-            <CompilerGenerated()>
-            Get
-                Return Me._LabLauncherTheme8Copy
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As TextBlock)
-                Dim mouseButtonEventHandler As MouseButtonEventHandler = Sub(a0 As Object, a1 As MouseButtonEventArgs)
-                    Me.LabLauncherTheme8Copy_MouseRightButtonUp()
-                End Sub
-                Dim textBlock As TextBlock = Me._LabLauncherTheme8Copy
-                If textBlock IsNot Nothing Then
-                    RemoveHandler textBlock.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-                Me._LabLauncherTheme8Copy = value
-                textBlock = Me._LabLauncherTheme8Copy
-                If textBlock IsNot Nothing Then
-                    AddHandler textBlock.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-            End Set
-        End Property
 
         Friend Overridable Property RadioLauncherTheme9 As OurRadioBox
-            <CompilerGenerated()>
-            Get
-                Return Me._RadioLauncherTheme9
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As OurRadioBox)
-                Dim mouseButtonEventHandler As MouseButtonEventHandler = Sub(a0 As Object, a1 As MouseButtonEventArgs)
-                    Me.LabLauncherTheme9Copy_MouseRightButtonUp()
-                End Sub
-                Dim myRadioBox As OurRadioBox = Me._RadioLauncherTheme9
-                If myRadioBox IsNot Nothing Then
-                    RemoveHandler myRadioBox.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-                Me._RadioLauncherTheme9 = value
-                myRadioBox = Me._RadioLauncherTheme9
-                If myRadioBox IsNot Nothing Then
-                    AddHandler myRadioBox.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-            End Set
-        End Property
 
         Friend Overridable Property LabLauncherTheme9Copy As TextBlock
-            <CompilerGenerated()>
-            Get
-                Return Me._LabLauncherTheme9Copy
-            End Get
-            <CompilerGenerated()>
-            <MethodImpl(MethodImplOptions.Synchronized)>
-            Set(value As TextBlock)
-                Dim mouseButtonEventHandler As MouseButtonEventHandler = Sub(a0 As Object, a1 As MouseButtonEventArgs)
-                    Me.LabLauncherTheme9Copy_MouseRightButtonUp()
-                End Sub
-                Dim textBlock As TextBlock = Me._LabLauncherTheme9Copy
-                If textBlock IsNot Nothing Then
-                    RemoveHandler textBlock.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-                Me._LabLauncherTheme9Copy = value
-                textBlock = Me._LabLauncherTheme9Copy
-                If textBlock IsNot Nothing Then
-                    AddHandler textBlock.MouseRightButtonUp, mouseButtonEventHandler
-                End If
-            End Set
-        End Property
 
         Friend Overridable Property RadioLauncherTheme10 As OurRadioBox
 
@@ -1102,7 +1007,6 @@ Namespace PCL
             End Set
         End Property
 
-        Friend Overridable Property PanLauncherHide As Border
 
         Friend Overridable Property CardBackground As OurCard
 

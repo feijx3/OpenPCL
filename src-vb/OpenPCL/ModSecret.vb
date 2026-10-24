@@ -287,7 +287,7 @@ Namespace PCL
                 Try
                     Dim num As Integer = Settings.[Get](Of Integer)("UiLauncherTheme", Nothing)
                     If Not ModSecret.ThemeCheckOne(num) Then
-                        Logger.Warn(String.Format("检测到尚未解锁的主题：{0}，已重置为默认主题", num), LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
+                        Logger.Warn(String.Format("检测到无效主题：{0}，已重置为默认主题", num), LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
                         Settings.[Set]("UiLauncherTheme", 0, Nothing)
                     End If
                     If CS$<>8__locals1.$VB$Local_EffectSetup AndAlso ModMain.FrmSetupUI IsNot Nothing Then
@@ -367,203 +367,19 @@ Namespace PCL
         End Sub
 
         Friend Function ThemeCheckOne(Id As Integer) As Boolean
-            Dim flag As Boolean
-            If New Integer() { 0, 1, 2, 3, 4, 42 }.Contains(Id) Then
-                flag = True
-            ElseIf ModSecret.PotatoFeatures.Contains("Theme" + Conversions.ToString(Id)) Then
-                flag = True
-            Else
-                Dim num As Integer = Id
-                If num <> 8 Then
-                    If num <> 14 Then
-                        If Settings.[Get](Of String)("UiLauncherThemeHide", Nothing).Contains("7") Then
-                            ModSecret.ThemeUnlock(7, False, Nothing)
-                        End If
-                        flag = Settings.[Get](Of String)("UiLauncherThemeHide2", Nothing).ToString().Split("|", False).Contains(Id.ToString())
-                    Else
-                        flag = Enumerable.Range(5, 9).Count(AddressOf ModSecret.ThemeCheckOne) >= 5
-                    End If
-                Else
-                    flag = ModSecret.CurrentRank >= DonationRank.Rank23
-                End If
-            End If
-            Return flag
+            Return (Id >= 0 AndAlso Id <= 14) OrElse Id = 42
         End Function
 
         Friend Function ThemeUnlock(Id As Integer, Optional ShowDoubleHint As Boolean = True, Optional UnlockHint As String = Nothing) As Boolean
-            Dim flag As Boolean
-            If ModMain.FrmMain Is Nothing Then
-                flag = False
-            Else
-                If Id = 8 Then
-                    Throw New Exception("不可使用此方式解锁秋仪金！")
-                End If
-                Dim list As List(Of String) = New List(Of String)(Settings.[Get](Of String)("UiLauncherThemeHide2", Nothing).ToString().Split("|", False))
-                If list.Contains(Id.ToString()) Then
-                    If ShowDoubleHint Then
-                        ModMain.Hint("该隐藏主题已被解锁！", ModMain.HintType.Blue, True)
-                    End If
-                    flag = False
-                Else
-                    Logger.Info(String.Format("解锁隐藏主题：{0}", Id), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                    If UnlockHint IsNot Nothing Then
-                        ModMain.Hint(UnlockHint, ModMain.HintType.Green, False)
-                    End If
-                    list.Add(Id.ToString())
-                    Settings.[Set]("UiLauncherThemeHide2", list.Join("|"), Nothing)
-                    ModSecret.ThemeCheckAll(True)
-                    flag = True
-                End If
-            End If
-            Return flag
+            ' 所有主题默认可用，不再创建解锁记录或重复提示。
+            Return False
         End Function
 
         Friend Sub UpdateCheckByButton()
-            If ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init Is Nothing Then
-                Interlocked.CompareExchange(Of StaticLocalInitFlag)(ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init, New StaticLocalInitFlag(), Nothing)
-            End If
-            Dim flag As Boolean = False
-            Try
-                Monitor.Enter(ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init, flag)
-                If ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init.State = 0S Then
-                    ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init.State = 2S
-                    ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate = False
-                ElseIf ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init.State = 2S Then
-                    Throw New IncompleteInitialization()
-                End If
-            Finally
-                ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init.State = 1S
-                If flag Then
-                    Monitor.[Exit](ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init)
-                End If
-            End Try
-            If ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate Then
-                ModMain.Hint("正在检查更新，请稍候！", ModMain.HintType.Blue, True)
-                Return
-            End If
-            ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate = True
-            Dim action As Action
-            If ModSecret._Closure$__.$I40-0 IsNot Nothing Then
-                action = ModSecret._Closure$__.$I40-0
-            Else
-                Dim action2 As Action = Sub()
-                    Try
-                        ModMain.Hint("正在检查更新，请稍候！", ModMain.HintType.Blue, True)
-                        ModSecret.ServerLoader.WaitForExit(Nothing, Nothing, True, Nothing, Nothing)
-                        Dim flag2 As Boolean? = PageSetupSystem.IsLauncherNewest()
-                        If flag2 Is Nothing Then
-                            ModMain.Hint("连接 PCL 服务器失败，请确认系统时间是否准确，尝试将 PCL 加入杀毒软件或防火墙白名单，然后重启 PCL！", ModMain.HintType.Red, True)
-                        ElseIf flag2.GetValueOrDefault() Then
-                            ModMain.Hint(String.Format("已经是最新{0} {1}，不需要更新啦，可以直接使用！", "快照版", "2.99.0.0"), ModMain.HintType.Green, True)
-                        Else
-                            If Not ModSecret.HasUpdatePermission Then
-                                ModSecret.InputPotatoCode(True)
-                                If Not ModSecret.HasUpdatePermission Then
-                                    Return
-                                End If
-                            ElseIf ModMain.OurMsgBox("发现启动器更新，是否立即下载？", "发现更新！", "更新！冲！", "取消", "", False, True, False, Nothing, Nothing, Nothing) = 2 Then
-                                Return
-                            End If
-                            ModSecret.UpdateStart(False, Nothing)
-                        End If
-                    Catch ex As Exception
-                        Logger.[Error](ex, "尝试手动开始更新失败", LogBehavior.AlertThenFeedback, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                    Finally
-                        ModSecret.$STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate = False
-                    End Try
-                End Sub
-                action = action2
-                ModSecret._Closure$__.$I40-0 = action2
-            End If
-            ModBase.RunInThread(action)
+            ModMain.Hint("此构建不提供启动器更新检查，请手动替换程序。", ModMain.HintType.Blue, True)
         End Sub
 
-        Private Sub UpdateStart(Silent As Boolean, Optional UrlsOverride As IEnumerable(Of String) = Nothing)
-            Dim CS$<>8__locals1 As ModSecret._Closure$__43-0 = New ModSecret._Closure$__43-0(CS$<>8__locals1)
-            CS$<>8__locals1.$VB$Local_UrlsOverride = UrlsOverride
-            If ModSecret.IsUpdating Then
-                If Not Silent Then
-                    ModMain.Hint("PCL 正在下载更新，更新结束时将自动重启，请稍候！", ModMain.HintType.Blue, True)
-                    ModSecret.$STATIC$UpdateStart$0212151280E91E$IsSilentUpdate = False
-                End If
-                If ModSecret.IsUpdateWaitingRestart Then
-                    ModSecret.UpdateRestart(True)
-                    Return
-                End If
-            Else
-                ModSecret.IsUpdating = True
-                ModSecret.$STATIC$UpdateStart$0212151280E91E$IsSilentUpdate = Silent
-                If Not ModSecret.$STATIC$UpdateStart$0212151280E91E$IsSilentUpdate Then
-                    ModMain.Hint("PCL 正在下载更新，更新结束时将自动重启，请稍候！", ModMain.HintType.Blue, True)
-                End If
-                Try
-                    Dim CS$<>8__locals2 As ModSecret._Closure$__43-1 = New ModSecret._Closure$__43-1(CS$<>8__locals2)
-                    CS$<>8__locals2.$VB$NonLocal_$VB$Closure_2 = CS$<>8__locals1
-                    CS$<>8__locals2.$VB$Local_Urls = Nothing
-                    CS$<>8__locals2.$VB$Local_Extension = Nothing
-                    CS$<>8__locals2.$VB$Local_LocalPath = Nothing
-                    CS$<>8__locals2.$VB$Local_Loader = New ModLoader.LoaderCombo(Of String)("启动器更新", New ModLoader.LoaderBase() { New ModLoader.LoaderTask(Of String, List(Of ModNet.NetFile))("获取更新信息", Sub(Task As ModLoader.LoaderTask(Of String, List(Of ModNet.NetFile)))
-                        If ModSecret.ServerLoader.State = ModBase.LoadState.Loading Then
-                            ModSecret.ServerLoader.WaitForExit(Nothing, Nothing, False, Nothing, Nothing)
-                        End If
-                        If CS$<>8__locals2.$VB$NonLocal_$VB$Closure_2.$VB$Local_UrlsOverride IsNot Nothing Then
-                            CS$<>8__locals2.$VB$Local_Urls = CS$<>8__locals2.$VB$NonLocal_$VB$Closure_2.$VB$Local_UrlsOverride.ToList()
-                        Else
-                            Dim serverConfig As JObject = ModSecret.ServerConfig
-                            Dim flag As Boolean
-                            If serverConfig Is Nothing Then
-                                flag = Nothing IsNot Nothing
-                            Else
-                                Dim jtoken As JToken = serverConfig("Update")
-                                flag = If((jtoken IsNot Nothing), jtoken(ModBase.BuildTypes.Snapshot.ToString()), Nothing) IsNot Nothing
-                            End If
-                            If flag Then
-                                Dim jobject As JObject = CType(ModSecret.ServerConfig("Update")(ModBase.BuildTypes.Snapshot.ToString()), JObject)
-                                If jobject.ContainsKey("PatchUrls") AndAlso ModSecret.UpdateMark.StartsWithF("Empty", False) Then
-                                    CS$<>8__locals2.$VB$Local_Urls = jobject("PatchUrls").ToObject(Of List(Of String))()
-                                ElseIf jobject.ContainsKey("DownloadUrls") Then
-                                    CS$<>8__locals2.$VB$Local_Urls = jobject("DownloadUrls").ToObject(Of List(Of String))()
-                                End If
-                            End If
-                        End If
-                        If CS$<>8__locals2.$VB$Local_Urls Is Nothing OrElse Not CS$<>8__locals2.$VB$Local_Urls.Any() Then
-                            Logger.[Error]("更新失败：服务器没有提供有效的更新包下载链接，或无法连接到服务器！", LogBehavior.Alert, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                            ModSecret.IsUpdating = False
-                            Return
-                        End If
-                        Dim $VB$Local_Urls As IEnumerable(Of String) = CS$<>8__locals2.$VB$Local_Urls
-                        Dim func As Func(Of String, String)
-                        If ModSecret._Closure$__.$I43-1 IsNot Nothing Then
-                            func = ModSecret._Closure$__.$I43-1
-                        Else
-                            Dim func2 As Func(Of String, String) = Function(u As String) ModMain.ArgumentReplace(u, New Func(Of String, String)(WebUtility.HtmlEncode), True)
-                            func = func2
-                            ModSecret._Closure$__.$I43-1 = func2
-                        End If
-                        CS$<>8__locals2.$VB$Local_Urls = $VB$Local_Urls.[Select](func).ToList()
-                        CS$<>8__locals2.$VB$Local_Extension = "." + PathUtils.GetExtension(CS$<>8__locals2.$VB$Local_Urls.First().BeforeLast("{CDN}", False))
-                        CS$<>8__locals2.$VB$Local_LocalPath = String.Format("{0}{1}.{2}{3}", New Object() { ModMain.RequestTaskTempFolder(False), "2.99.0.0", 0, CS$<>8__locals2.$VB$Local_Extension })
-                        Logger.Info(String.Format("更新开始，静默：{0}，扩展名：{1}，下载目标：{2}，URL：{3}", New Object() { ModSecret.$STATIC$UpdateStart$0212151280E91E$IsSilentUpdate, CS$<>8__locals2.$VB$Local_Extension, CS$<>8__locals2.$VB$Local_LocalPath, CS$<>8__locals2.$VB$Local_Urls.Join("，") }), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                        Task.Output = New ModNet.NetFile() { New ModNet.NetFile(CS$<>8__locals2.$VB$Local_Urls, CS$<>8__locals2.$VB$Local_LocalPath, Nothing, False) }.ToList()
-                    End Sub, Nothing, ThreadPriority.Normal) With { .ProgressWeight = 0.1 }, New ModNet.LoaderDownload("下载更新文件", New List(Of ModNet.NetFile)()) With { .ProgressWeight = 1.0 }, New ModLoader.LoaderTask(Of String, Integer)("安装更新", Sub(a0 As ModLoader.LoaderTask(Of String, Integer))
-                        MyBase._Lambda$__2()
-                    End Sub, Nothing, ThreadPriority.Normal) With { .ProgressWeight = 0.1 } })
-                    CS$<>8__locals2.$VB$Local_Loader.OnStateChanged = Sub(a0 As ModLoader.LoaderBase)
-                        MyBase._Lambda$__3()
-                    End Sub
-                    CS$<>8__locals2.$VB$Local_Loader.Start(Nothing, False)
-                    ModBase.RunInUi(Sub()
-                        If Not ModSecret.$STATIC$UpdateStart$0212151280E91E$IsSilentUpdate Then
-                            ModLoader.LoaderTaskbarAdd(Of String)(CS$<>8__locals2.$VB$Local_Loader)
-                            ModMain.FrmMain.BtnExtraDownload.ShowRefresh()
-                        End If
-                    End Sub, False)
-                Catch ex As Exception
-                    Logger.[Error](ex, "开始启动器更新失败", LogBehavior.AlertThenFeedback, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                    ModSecret.IsUpdating = False
-                End Try
-            End If
-        End Sub
+
 
         Public Sub UpdateRestart(TriggerRestartAndByEnd As Boolean)
             Try
@@ -643,317 +459,28 @@ Namespace PCL
             Interaction.MsgBox(String.Format("{0}{1}{2}详细错误信息：{3}{4}", New Object() { vb$AnonymousDelegate_("删除老版本文件时出错"), vbCrLf, vbCrLf, vbCrLf, ex2.GetDisplay(True) }), MsgBoxStyle.Critical, "更新失败")
         End Sub
 
-        Friend Sub DownloadLatestPCL(Optional LoaderToSyncProgress As ModLoader.LoaderBase = Nothing)
-            Dim num As Integer = If(FileUtils.Exists(ModBase.PathTemp + "Latest.exe"), Settings.[Get](Of Integer)("SystemHighestSavedBetaVersionReg", Nothing), 0)
-            Dim num2 As Integer = 0
-            Dim text As String = If(FileUtils.TryReadAsString(ModBase.PathTemp + "Cache\Notice.cfg", Nothing, Nothing), "")
-            If text.Split("|", False).Count() >= 3 Then
-                num2 = Conversions.ToInteger(text.Split("|", False)(2))
-            End If
-            If num < num2 Then
-                Logger.Info(String.Format("需要下载最新正式版：{0} -> {1}", num, num2), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                If ModSecret.ServerConfig Is Nothing Then
-                    ModSecret.ServerLoader.WaitForExit(Nothing, Nothing, ModSecret.ServerLoader.State = ModBase.LoadState.Finished, Nothing, Nothing)
-                End If
-                If ModSecret.ServerConfig Is Nothing Then
-                    Throw New Exception("无法从服务器获取正式版 PCL 下载链接！")
-                End If
-                Dim enumerable As IEnumerable(Of JToken) = ModSecret.ServerConfig("Update")("Release")("DownloadUrls")
-                Dim func As Func(Of JToken, String)
-                If ModSecret._Closure$__.$I47-0 IsNot Nothing Then
-                    func = ModSecret._Closure$__.$I47-0
-                Else
-                    Dim func2 As Func(Of JToken, String) = Function(t As JToken) t.ToString()
-                    func = func2
-                    ModSecret._Closure$__.$I47-0 = func2
-                End If
-                ModNet.NetDownloadByLoader(enumerable.[Select](func).ToList(), ModBase.PathTemp + "Latest.zip", LoaderToSyncProgress, New FileChecker() With { .MinSize = 1048576L }, False)
-                FileUtils.ExtractToDirectory(ModBase.PathTemp + "Latest.zip", ModBase.PathTemp, Nothing, Nothing)
-                FileUtils.Delete(ModBase.PathTemp + "Latest.zip", False)
-                FileUtils.Move(ModBase.PathTemp + "OpenPCL.exe", ModBase.PathTemp + "Latest.exe", False)
-                Settings.[Set]("SystemHighestSavedBetaVersionReg", num2, Nothing)
-            End If
-        End Sub
+
 
         Private Sub ServerSub(Loader As ModLoader.LoaderTask(Of Integer, Integer))
+            Dim path As String = ModBase.PathTemp + "Cache\ServerConfig.json"
+            ModSecret.ServerConfig = Nothing
             Try
-                If FileUtils.Exists(Paths.Base + "PCL\update.exe") Then
-                    FileUtils.Delete(Paths.Base + "PCL\update.exe", False)
-                    Logger.Info("已清理更新缓存", LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
+                If FileUtils.Exists(path) Then
+                    ModSecret.ServerConfig = CType(FileUtils.ReadAsJson(path, Nothing, Nothing), JObject)
                 End If
             Catch ex As Exception
-                Logger.Warn(ex, "清理更新缓存失败", LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
+                Logger.Warn(ex, "读取联机配置缓存失败", LogBehavior.ToastIfDebug)
             End Try
-            Dim num As Integer = 0
-            Dim text As String = ModBase.PathTemp + "Cache\ServerConfig.json"
             Try
-                If FileUtils.Exists(text) Then
-                    ModSecret.ServerConfig = CType(FileUtils.ReadAsJson(text, Nothing, Nothing), JObject)
-                    num = CInt(Math.Round(ModBase.Val(ModSecret.ServerConfig("Version"))))
-                    Logger.Info(String.Format("已读取本地缓存的配置：{0}", num), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                End If
-            Catch ex2 As Exception
-                Logger.Warn(ex2, "读取配置信息失败", LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                ModSecret.ServerConfig = Nothing
-                FileUtils.Delete(text, False)
-            End Try
-            Loader.Progress = 0.2
-            Dim num2 As Integer = Settings.[Get](Of Integer)("HintNotice", Nothing)
-            Dim text2 As String = ModBase.PathTemp + "Cache\Notice.cfg"
-            Dim text3 As String
-            Dim num3 As Integer
-            Try
-                text3 = ModNet.NetRequestByClientRetry("https://pcl2-server-1253424809.file.myqcloud.com/notice.cfg{CDN}", Nothing, Nothing, Nothing, Nothing, "*/*", Nothing, False, Nothing, False)
-                num3 = CInt(Math.Round(ModBase.Val(text3.Split("|", False)(0))))
-                If num3 = 0 Then
-                    Throw New Exception("获取到的内容有误！（" + text3 + "）")
-                End If
-                If num3 > num2 Then
-                    Logger.Info(String.Format("本地公告编号：{0}，服务器公告：{1}，需更新", num2, text3), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                Else
-                    Logger.Info(String.Format("本地公告编号：{0}，服务器公告：{1}，无需更新", num2, text3), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                End If
-                FileUtils.Write(text2, text3, Nothing)
-            Catch ex3 As Exception
-                If TypeOf ex3 Is InvalidOperationException AndAlso ex3.Message.Contains("FIPS") Then
-                    If ModMain.OurMsgBox("由于系统未启用 FIPS 兼容算法，PCL 可能无法正常运行。" & vbCrLf & "请按照教程启用该功能，然后重启 PCL。", "兼容性警告", "打开教程", "取消", "", True, True, False, Nothing, Nothing, Nothing) = 1 Then
-                        ModBase.OpenWebsite("https://blog.csdn.net/qq_37608398/article/details/81209922")
-                    End If
-                Else
-                    Logger.Warn(ex3, "获取 PCL 服务器状态失败", LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                    FileUtils.Delete(text2, False)
-                End If
-                Return
-            End Try
-            Loader.Progress = 0.4
-            Try
-                Dim num4 As Double = ModBase.Val(text3.Split("|", False)(4))
-                If CDbl(num) < num4 Then
-                    Logger.Info(String.Format("本地配置版本号：{0}，服务器配置版本号：{1}，需要更新", num, num4), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                    ModNet.NetDownloadByClient("https://pcl2-server-1253424809.file.myqcloud.com/ServerConfig.json{CDN}", text, False)
-                    ModSecret.ServerConfig = CType(FileUtils.ReadAsJson(text, Nothing, Nothing), JObject)
-                End If
-            Catch ex4 As Exception
-                Logger.Warn(ex4, "下载配置信息失败", LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-            End Try
-            Loader.Progress = 0.6
-            Dim text4 As String
-            Try
-                If num3 <= num2 AndAlso FileUtils.Exists(ModBase.PathTemp + "Cache\Notice.json") Then
-                    text4 = FileUtils.ReadAsString(ModBase.PathTemp + "Cache\Notice.json", Nothing, Nothing)
-                Else
-                    text4 = ModNet.NetRequestByClientRetry("https://pcl2-server-1253424809.file.myqcloud.com/notice.json{CDN}", Nothing, Nothing, Nothing, Nothing, "*/*", Nothing, True, Nothing, False)
-                    FileUtils.Write(ModBase.PathTemp + "Cache\Notice.json", text4, Nothing)
-                End If
-                Settings.[Set]("HintNotice", num3, Nothing)
-            Catch ex5 As Exception
-                Logger.Warn(ex5, "下载 PCL 服务器公告失败", LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                FileUtils.Delete(ModBase.PathTemp + "Cache\Notice.json", False)
-                Return
-            End Try
-            Loader.Progress = 0.9
-            Try
-                Try
-                    For Each jtoken As JToken In text4.Replace("{UNIQUE}", ModBase.Identify).DeserializeJson()
-                        Dim jobject As JObject = CType(jtoken, JObject)
-                        Dim num5 As Integer = CInt(Math.Round(ModBase.Val(If(jobject("id"), 0))))
-                        If num5 > num2 Then
-                            Dim flag As Boolean = True
-                            Try
-                                For Each jtoken2 As JToken In (If(jobject("requirements"), New Byte(-1) {}))
-                                    Dim jproperty As JProperty = CType(jtoken2, JProperty)
-                                    If Not ModSecret.ServerRequirement(jproperty.Name, jproperty.Value) Then
-                                        flag = False
-                                    End If
-                                Next
-                            Finally
-                                Dim enumerator2 As IEnumerator(Of JToken)
-                                If enumerator2 IsNot Nothing Then
-                                    enumerator2.Dispose()
-                                End If
-                            End Try
-                            If flag Then
-                                Dim num6 As Integer = CInt((If(jobject("importantLevel"), 2)))
-                                Dim flag2 As Boolean = CBool((If(jobject("isUpdate"), False)))
-                                Logger.Info(String.Format("重要等级 {0}，更新公告 {1}", num6, flag2), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                                If Settings.[Get](Of Integer)(If(flag2, "SystemSystemUpdate", "SystemSystemActivity"), Nothing) <= num6 AndAlso (Not flag2 OrElse Not ModSecret.IsUpdating) Then
-                                    Dim text5 As String = (If(jobject("title"), "公告")).ToString()
-                                    Dim text6 As String = (If(jobject("description"), "")).ToString().Replace("\n", vbCrLf)
-                                    Dim jarray As JArray = CType((If(jobject("buttons"), New JArray())), JArray)
-                                    Dim count As Integer = jarray.Count
-                                    Dim obj As Object = New Object(-1) {}
-                                    If count > 0 Then
-                                        Logger.Info(String.Format("显示公告 {0}：{1}", num5, text6), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                                        Dim num7 As Integer
-                                        Select Case count
-                                            Case 1
-                                                num7 = ModMain.OurMsgBox(text6, text5, (If(jarray(0)("text"), "确定")).ToString(), "", "", False, True, True, Nothing, Nothing, Nothing)
-                                            Case 2
-                                                num7 = ModMain.OurMsgBox(text6, text5, (If(jarray(0)("text"), "确定")).ToString(), (If(jarray(1)("text"), "确定")).ToString(), "", False, True, False, Nothing, Nothing, Nothing)
-                                            Case 3
-                                                num7 = ModMain.OurMsgBox(text6, text5, (If(jarray(0)("text"), "确定")).ToString(), (If(jarray(1)("text"), "确定")).ToString(), (If(jarray(2)("text"), "确定")).ToString(), False, True, False, Nothing, Nothing, Nothing)
-                                            Case Else
-                                                Logger.Warn(String.Format("公告 {0} 的弹窗有 {1} 个按钮，无法显示", num5, count), LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                                                Continue For
-                                        End Select
-                                        num7 = num7.Clamp(1, count)
-                                        obj = If(jarray(num7 - 1)("actions"), New Byte(-1) {})
-                                    Else
-                                        obj = If(jobject("actions"), New Byte(-1) {})
-                                    End If
-                                    Try
-                                        For Each obj2 As Object In CType(obj, IEnumerable)
-                                            Dim jproperty2 As JProperty = CType(obj2, JProperty)
-                                            Try
-                                                Dim name As String = jproperty2.Name
-                                                If Operators.CompareString(name, "copy", False) <> 0 Then
-                                                    If Operators.CompareString(name, "website", False) <> 0 Then
-                                                        If Operators.CompareString(name, "stop", False) <> 0 Then
-                                                            If Operators.CompareString(name, "setup", False) <> 0 Then
-                                                                If Operators.CompareString(name, "update", False) <> 0 AndAlso Operators.CompareString(name, "slientupdate", False) <> 0 Then
-                                                                    Throw New Exception("未知的行动支：" + jproperty2.Name + ", " + jproperty2.Value.ToString())
-                                                                End If
-                                                            Else
-                                                                Dim jobject2 As JObject = CType(jproperty2.Value, JObject)
-                                                                Try
-                                                                    For Each keyValuePair As KeyValuePair(Of String, JToken) In jobject2
-                                                                        Settings.[Set](keyValuePair.Key, keyValuePair.Value.ToString(), Nothing)
-                                                                    Next
-                                                                    Continue For
-                                                                Finally
-                                                                    Dim enumerator4 As IEnumerator(Of KeyValuePair(Of String, JToken))
-                                                                    If enumerator4 IsNot Nothing Then
-                                                                        enumerator4.Dispose()
-                                                                    End If
-                                                                End Try
-                                                            End If
-                                                            Dim jobject3 As JObject = CType(jproperty2.Value, JObject)
-                                                            Dim flag3 As Boolean = Operators.CompareString(jproperty2.Name, "slientupdate", False) = 0
-                                                            If Not ModSecret.HasUpdatePermission Then
-                                                                If Not flag3 Then
-                                                                    ModSecret.InputPotatoCode(True)
-                                                                End If
-                                                                If Not ModSecret.HasUpdatePermission Then
-                                                                    Continue For
-                                                                End If
-                                                            End If
-                                                            ModSecret.UpdateStart(flag3, Nothing)
-                                                        Else
-                                                            ModMain.FrmMain.EndProgram(False)
-                                                        End If
-                                                    Else
-                                                        ModBase.OpenWebsite(jproperty2.Value.ToString())
-                                                    End If
-                                                Else
-                                                    ModBase.ClipboardSet(jproperty2.Value.ToString(), True)
-                                                End If
-                                            Catch ex6 As Exception
-                                                Logger.[Error](ex6, String.Format("执行 PCL 服务器公告动作失败（{0}, {1}）", jproperty2.Name, jproperty2.Value), LogBehavior.Toast, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                                            End Try
-                                        Next
-                                    Finally
-                                        Dim enumerator3 As IEnumerator
-                                        If TypeOf enumerator3 Is IDisposable Then
-                                            TryCast(enumerator3, IDisposable).Dispose()
-                                        End If
-                                    End Try
-                                End If
-                            End If
-                        End If
-                    Next
-                Finally
-                    Dim enumerator As IEnumerator(Of JToken)
-                    If enumerator IsNot Nothing Then
-                        enumerator.Dispose()
-                    End If
-                End Try
-            Catch ex7 As Exception
-                Logger.Warn(text4, LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                Logger.[Error](ex7, String.Format("读取 PCL 服务器公告失败（{0}）", text4.Length), LogBehavior.Toast, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                FileUtils.Delete(ModBase.PathTemp + "Cache\Notice.json", False)
+                ModSecret.ServerConfig = CType(ModNet.NetRequestByClientRetry("https://pcl2-server-1253424809.file.myqcloud.com/ServerConfig.json{CDN}", Nothing, Nothing, Nothing, Nothing, "*/*", Nothing, True, Nothing, False).DeserializeJson(), JObject)
+                FileUtils.Write(path, ModSecret.ServerConfig.ToString(), Nothing)
+            Catch ex As Exception
+                If ModSecret.ServerConfig Is Nothing Then Throw
+                Logger.Warn(ex, "获取联机配置失败，使用本地配置", LogBehavior.ToastIfDebug)
             End Try
         End Sub
 
-        Private Function ServerRequirement(Name As String, Value As JToken) As Boolean
-            ' The following expression was wrapped in a checked-statement
-            Dim flag As Boolean
-            Try
-                Dim num As UInteger = <PrivateImplementationDetails>.ComputeStringHash(Name)
-                If num <= 2207725236UI Then
-                    If num <= 1143669093UI Then
-                        If num <> 127006290UI Then
-                            If num <> 233440242UI Then
-                                If num = 1143669093UI Then
-                                    If Operators.CompareString(Name, "setupboolean =", False) = 0 Then
-                                        Return Settings.[Get](Of Boolean)(CType(Value, JProperty).Name, Nothing) = CType(Value, JProperty).Value.ToObject(Of Boolean)()
-                                    End If
-                                End If
-                            ElseIf Operators.CompareString(Name, "unlockedtheme =", False) = 0 Then
-                                Return ModSecret.ThemeCheckOne(CInt(Math.Round(ModBase.Val(Value))))
-                            End If
-                        ElseIf Operators.CompareString(Name, "versionbranch <=", False) = 0 Then
-                            Return ModBase.Val(0) <= ModBase.Val(Value)
-                        End If
-                    ElseIf num <= 1834020325UI Then
-                        If num <> 1699755989UI Then
-                            If num = 1834020325UI Then
-                                If Operators.CompareString(Name, "setupinteger >=", False) = 0 Then
-                                    Return CDbl(Settings.[Get](Of Integer)(CType(Value, JProperty).Name, Nothing)) >= ModBase.Val(CType(Value, JProperty).Value)
-                                End If
-                            End If
-                        ElseIf Operators.CompareString(Name, "opencount >=", False) = 0 Then
-                            Return CDbl(Settings.[Get](Of Integer)("SystemCount", Nothing)) >= ModBase.Val(Value)
-                        End If
-                    ElseIf num <> 1931416207UI Then
-                        If num = 2207725236UI Then
-                            If Operators.CompareString(Name, "versionbranch >=", False) = 0 Then
-                                Return ModBase.Val(0) >= ModBase.Val(Value)
-                            End If
-                        End If
-                    ElseIf Operators.CompareString(Name, "debug =", False) = 0 Then
-                        Return Operators.CompareString(ModBase.ModeDebug.ToString().Lower(), Value.ToString().Lower(), False) = 0
-                    End If
-                ElseIf num <= 3063258025UI Then
-                    If num <> 2410018677UI Then
-                        If num <> 2561636181UI Then
-                            If num = 3063258025UI Then
-                                If Operators.CompareString(Name, "unlockedtheme !=", False) = 0 Then
-                                    Return Not ModSecret.ThemeCheckOne(CInt(Math.Round(ModBase.Val(Value))))
-                                End If
-                            End If
-                        ElseIf Operators.CompareString(Name, "uniqueaddress =", False) = 0 Then
-                            Return Operators.CompareString(ModBase.Identify, Value.ToString(), False) = 0
-                        End If
-                    ElseIf Operators.CompareString(Name, "d10000 <=", False) = 0 Then
-                        Return CDbl(ModBase.RandomInteger(1, 10000)) <= ModBase.Val(Value)
-                    End If
-                ElseIf num <= 3317911237UI Then
-                    If num <> 3250506571UI Then
-                        If num = 3317911237UI Then
-                            If Operators.CompareString(Name, "versioncode <=", False) = 0 Then
-                                Return 414.0 <= ModBase.Val(Value)
-                            End If
-                        End If
-                    ElseIf Operators.CompareString(Name, "versioncode >=", False) = 0 Then
-                        Return 414.0 >= ModBase.Val(Value)
-                    End If
-                ElseIf num <> 3779783387UI Then
-                    If num = 3914047723UI Then
-                        If Operators.CompareString(Name, "setupinteger <=", False) = 0 Then
-                            Return CDbl(Settings.[Get](Of Integer)(CType(Value, JProperty).Name, Nothing)) <= ModBase.Val(CType(Value, JProperty).Value)
-                        End If
-                    End If
-                ElseIf Operators.CompareString(Name, "opencount <=", False) = 0 Then
-                    Return CDbl(Settings.[Get](Of Integer)("SystemCount", Nothing)) <= ModBase.Val(Value)
-                End If
-                Logger.Warn(String.Format("未知的条件支：{0}, {1}", Name, Value), LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                flag = False
-            Catch ex As Exception
-                Logger.Warn(String.Format("判断分支条件失败：{0}, {1}", Name, Value), LogBehavior.ToastIfDebug, "E:\Projects\PCL\本体代码\OpenPCL\Modules\ModSecret.vb")
-                flag = False
-            End Try
-            Return flag
-        End Function
+
 
         Public ReadOnly Property CurrentRank As DonationRank
             Get
@@ -1142,7 +669,6 @@ Namespace PCL
 
         Public Const OAuthClientId As String = "fe72edc2-3a6f-4280-90e8-e2beb64ce7e1"
 
-        Public Const ClsBaseUrl As String = "https://ap-shanghai.cls.tencentcs.com/track?topic_id=pcl-remote-1253424809"
 
         Public Const RestrictMcDownload As Boolean = True
 
@@ -1216,10 +742,7 @@ Namespace PCL
 
         Private Const EcdsaPublicKey As String = "RUNTMSAAAAC4QTUNAewh23Q4Q6koHkyIrDIIZUSbua23sf2DiZmIRwSzadISDRyTVTbuWniH3KR7rKj8XBsabms1be6i3c+S"
 
-        Private $STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate As Boolean
 
-        Private $STATIC$UpdateCheckByButton$001$IsUiCheckingUpdate$Init As StaticLocalInitFlag
 
-        Private $STATIC$UpdateStart$0212151280E91E$IsSilentUpdate As Boolean
     End Module
 End Namespace

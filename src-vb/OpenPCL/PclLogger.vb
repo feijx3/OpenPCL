@@ -32,7 +32,7 @@ Namespace PCL
                     Case LogBehavior.Alert
                         ModMain.OurMsgBox(text2, "错误", "确定", "", "", True, True, False, Nothing, Nothing, Nothing)
                     Case LogBehavior.AlertThenFeedback
-                        If PageSetupSystem.IsLauncherNewest().GetValueOrDefault() Then
+                        If PageSetupSystem.IsLauncherNewest().GetValueOrDefault(True) Then
                             If ModMain.OurMsgBox(text2 + vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", "错误", "反馈", "取消", "", True, True, False, Nothing, Nothing, Nothing) = 1 Then
                                 ModMain.Feedback(False, True)
                             End If
@@ -60,7 +60,7 @@ Namespace PCL
                         End Try
                         If Me.$STATIC$HandleBehavior$2041EE1181E91280CD$FirstTrigger Then
                             Me.$STATIC$HandleBehavior$2041EE1181E91280CD$FirstTrigger = False
-                            If PageSetupSystem.IsLauncherNewest().GetValueOrDefault() Then
+                            If PageSetupSystem.IsLauncherNewest().GetValueOrDefault(True) Then
                                 If Interaction.MsgBox(text2 + vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.YesNo Or MsgBoxStyle.Critical, "错误") = MsgBoxResult.Yes Then
                                     ModMain.Feedback(False, True)
                                 End If

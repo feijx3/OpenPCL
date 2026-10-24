@@ -24,12 +24,65 @@ namespace PCL
     {
         public static void ModpackInstall()
         {
-            ModMain.Hint("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……", ModMain.HintType.Red, true);
+            string file = Dialogs.SelectFile("选择整合包压缩包", false, null, new OneOf<IEnumerable<ValueTuple<string[], string>>, string>?("整合包文件(*.zip;*.rar;*.mrpack)|*.zip;*.rar;*.mrpack")).FirstOrDefault<string>();
+            if (file == null)
+            {
+                return;
+            }
+            ModBase.RunInNewThread(new Action(delegate
+            {
+                try
+                {
+                    ModModpack.ModpackInstall(file, null, null);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.IsCanceled())
+                    {
+                        Logger.Info("手动安装整合包已取消", LogBehavior.None);
+                    }
+                    else
+                    {
+                        Logger.Error(ex, "手动安装整合包失败", LogBehavior.Alert);
+                    }
+                }
+            }), "Modpack Install", ThreadPriority.Normal);
+        }
+
+        // 0 CurseForge, 1 HMCL, 2 MultiMC/Prism, 3 MCBBS, 4 Modrinth, 5 带启动器的整合包, -1 未识别
+        private static int DetectPackType(ZipArchive Archive, string Prefix)
+        {
+            if (Archive.GetEntry(Prefix + "mcbbs.packmeta") != null)
+            {
+                return 3;
+            }
+            if (Archive.GetEntry(Prefix + "mmc-pack.json") != null)
+            {
+                return 2;
+            }
+            if (Archive.GetEntry(Prefix + "modrinth.index.json") != null)
+            {
+                return 4;
+            }
+            ZipArchiveEntry entry = Archive.GetEntry(Prefix + "manifest.json");
+            if (entry != null)
+            {
+                return (((JObject)entry.Open().ReadString(Encoding.UTF8).DeserializeJson())["addons"] == null) ? 0 : 3;
+            }
+            if (Archive.GetEntry(Prefix + "modpack.json") != null)
+            {
+                return 1;
+            }
+            if (Archive.GetEntry(Prefix + "modpack.zip") != null || Archive.GetEntry(Prefix + "modpack.mrpack") != null)
+            {
+                return 5;
+            }
+            return -1;
         }
 
         public static ModLoader.LoaderCombo<string> ModpackInstall(string File, string InstanceName = null, string Logo = null)
         {
-            Logger.Info(string.Format("整合包安装请求：{0}", File ?? "null"), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\Minecraft\\ModModpack.vb");
+            Logger.Info(string.Format("整合包安装请求：{0}", File ?? "null"), LogBehavior.None, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Modules\\Minecraft\\ModModpack.vb");
             ZipArchive zipArchive = null;
             try
             {
@@ -39,78 +92,23 @@ namespace PCL
                     ModMain.Hint("游戏路径中不能含有感叹号或分号：" + text, ModMain.HintType.Red, true);
                     throw new OperationCanceledException();
                 }
+                int packType;
+                string baseFolder = "";
                 try
                 {
                     zipArchive = FileUtils.OpenZip(File, default(CancellationToken));
-                    if (zipArchive.GetEntry("mcbbs.packmeta") == null)
+                    packType = ModModpack.DetectPackType(zipArchive, "");
+                    if (packType == -1)
                     {
-                        if (zipArchive.GetEntry("mmc-pack.json") == null)
+                        string[] markers = new string[] { "mcbbs.packmeta", "mmc-pack.json", "modrinth.index.json", "manifest.json", "modpack.json", "modpack.zip", "modpack.mrpack" };
+                        foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
                         {
-                            if (zipArchive.GetEntry("modrinth.index.json") == null)
+                            string[] array = zipArchiveEntry.FullName.Split('/');
+                            if (array.Length == 2 && markers.Contains(array[1]))
                             {
-                                if (zipArchive.GetEntry("manifest.json") != null)
-                                {
-                                    if (((JObject)zipArchive.GetEntry("manifest.json").Open().ReadString(Encoding.UTF8)
-                                        .DeserializeJson())["addons"] == null)
-                                    {
-                                    }
-                                }
-                                else if (zipArchive.GetEntry("modpack.json") == null)
-                                {
-                                    if (zipArchive.GetEntry("modpack.zip") == null && zipArchive.GetEntry("modpack.mrpack") == null)
-                                    {
-                                        try
-                                        {
-                                            foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
-                                            {
-                                                string[] array = zipArchiveEntry.FullName.Split("/", false);
-                                                string text2 = array[0] + "/";
-                                                if (array.Count<string>() == 2)
-                                                {
-                                                    if (Operators.CompareString(array[1], "mcbbs.packmeta", false) == 0)
-                                                    {
-                                                        break;
-                                                    }
-                                                    if (Operators.CompareString(array[1], "mmc-pack.json", false) == 0)
-                                                    {
-                                                        break;
-                                                    }
-                                                    if (Operators.CompareString(array[1], "modrinth.index.json", false) == 0)
-                                                    {
-                                                        break;
-                                                    }
-                                                    if (Operators.CompareString(array[1], "manifest.json", false) == 0)
-                                                    {
-                                                        if (((JObject)zipArchiveEntry.Open().ReadString(Encoding.UTF8).DeserializeJson())["addons"] == null)
-                                                        {
-                                                            break;
-                                                        }
-                                                        break;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (Operators.CompareString(array[1], "modpack.json", false) == 0)
-                                                        {
-                                                            break;
-                                                        }
-                                                        if (Operators.CompareString(array[1], "modpack.zip", false) == 0 || Operators.CompareString(array[1], "modpack.mrpack", false) == 0)
-                                                        {
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        finally
-                                        {
-                                            IEnumerator<ZipArchiveEntry> enumerator = default;
-                                            if (enumerator != null)
-                                            {
-                                                enumerator.Dispose();
-                                            }
-                                        }
-                                    }
-                                }
+                                baseFolder = array[0] + "/";
+                                packType = ModModpack.DetectPackType(zipArchive, baseFolder);
+                                break;
                             }
                         }
                     }
@@ -127,17 +125,30 @@ namespace PCL
                     }
                     throw new Exception("打开整合包文件失败，文件可能损坏或为不支持的压缩包格式", ex);
                 }
-                throw new Exception("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……");
+                switch (packType)
+                {
+                case 0:
+                    return ModModpack.InstallPackCurseForge(File, zipArchive, baseFolder, InstanceName, Logo);
+                case 1:
+                    return ModModpack.InstallPackHMCL(File, zipArchive, baseFolder);
+                case 2:
+                    return ModModpack.InstallPackMMC(File, zipArchive, baseFolder);
+                case 3:
+                    return ModModpack.InstallPackMCBBS(File, zipArchive, baseFolder, InstanceName);
+                case 4:
+                    return ModModpack.InstallPackModrinth(File, zipArchive, baseFolder, InstanceName, Logo);
+                case 5:
+                    return ModModpack.InstallPackLauncherPack(File, zipArchive, baseFolder);
+                default:
+                    return ModModpack.InstallPackCompress(File, zipArchive);
+                }
             }
             finally
             {
                 if (zipArchive != null)
                 {
                     zipArchive.Dispose();
-                    goto IL_02EE;
                 }
-                goto IL_02EE;
-                IL_02EE:;
             }
         }
 

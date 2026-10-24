@@ -552,7 +552,7 @@ namespace PCL
                 List<ModLoader.LoaderBase> list2 = new List<ModLoader.LoaderBase>();
                 if (CS_locals1._VB_Local_IncludePCL)
                 {
-                    list2.Add(new ModLoader.LoaderTask<int, int>("下载 PCL 正式版", new Action<ModLoader.LoaderTask<int, int>>(CS_locals1._Lambda___0), null, ThreadPriority.Normal)
+                    list2.Add(new ModLoader.LoaderTask<int, int>("复制 OpenPCL 启动器", new Action<ModLoader.LoaderTask<int, int>>(CS_locals1._Lambda___0), null, ThreadPriority.Normal)
                     {
                         ProgressWeight = 0.5,
                         Block = false
@@ -1762,8 +1762,7 @@ namespace PCL
 
             internal void _Lambda___0(ModLoader.LoaderTask<int, int> Loader)
             {
-                ModSecret.DownloadLatestPCL(Loader);
-                FileUtils.Copy(ModBase.PathTemp + "Latest.exe", this._VB_Local_CacheFolder + "OpenPCL.exe");
+                FileUtils.Copy(ModBase.PathExe, this._VB_Local_CacheFolder + "OpenPCL.exe");
             }
 
             internal void _Lambda___1(ModLoader.LoaderTask<int, List<LocalResourceFile>> Loader)

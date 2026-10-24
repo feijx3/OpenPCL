@@ -421,7 +421,6 @@ Namespace PCL
                     Thread.Sleep(100)
                     ModDownload.DlClientListMojangLoader.Start(1, False)
                     Me.RunCountSub()
-                    ModSecret.ServerLoader.Start(Nothing, False)
                     ModBase.RunInNewThread(AddressOf ModMain.TryClearTaskTemp, "TryClearTaskTemp", ThreadPriority.BelowNormal)
                 Catch ex2 As Exception
                     Logger.[Error](ex2, "初始化加载池运行失败", LogBehavior.AlertThenFeedback, "E:\Projects\PCL\本体代码\OpenPCL\FormMain.xaml.vb")
@@ -1140,10 +1139,6 @@ Namespace PCL
                             ModBase.RunInUi(action3, False)
                             Return
                         Catch ex As Exception
-                            If Operators.CompareString(ex.Message, "为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……", False) = 0 Then
-                                ModMain.Hint(ex.Message, ModMain.HintType.Red, True)
-                                Return
-                            End If
                             If ex.IsCanceled() Then
                                 Return
                             End If

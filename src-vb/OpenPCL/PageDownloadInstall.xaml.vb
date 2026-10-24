@@ -63,28 +63,7 @@ Namespace PCL
             Dim panLoad As FrameworkElement = Me.PanLoad
             Dim panAllBack As FrameworkElement = Me.PanAllBack
             Dim frameworkElement As FrameworkElement = Nothing
-            Dim text As String = "关闭下载"
-            Dim action As Action(Of ModLoader.LoaderTask(Of String, ModDownload.DlClientListResult))
-            If PageDownloadInstall._Closure$__.$IR3-3 IsNot Nothing Then
-                action = PageDownloadInstall._Closure$__.$IR3-3
-            Else
-                Dim action2 As Action(Of ModLoader.LoaderTask(Of String, ModDownload.DlClientListResult)) = Sub(a0 As ModLoader.LoaderTask(Of String, ModDownload.DlClientListResult))
-                    Dim vb$AnonymousDelegate_ As VB$AnonymousDelegate_10
-                    If PageDownloadInstall._Closure$__.$I3-0 IsNot Nothing Then
-                        vb$AnonymousDelegate_ = PageDownloadInstall._Closure$__.$I3-0
-                    Else
-                        Dim vb$AnonymousDelegate_2 As VB$AnonymousDelegate_10 = Sub()
-                            Throw New Exception("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……")
-                        End Sub
-                        vb$AnonymousDelegate_ = vb$AnonymousDelegate_2
-                        PageDownloadInstall._Closure$__.$I3-0 = vb$AnonymousDelegate_2
-                    End If
-                    vb$AnonymousDelegate_()
-                End Sub
-                action = action2
-                PageDownloadInstall._Closure$__.$IR3-3 = action2
-            End If
-            MyBase.PageLoaderInit(Of String, ModDownload.DlClientListResult)(loadMinecraft, panLoad, panAllBack, frameworkElement, New ModLoader.LoaderTask(Of String, ModDownload.DlClientListResult)(text, action, Nothing, ThreadPriority.Normal), Sub(a0 As ModLoader.LoaderTask(Of String, ModDownload.DlClientListResult))
+            MyBase.PageLoaderInit(Of String, ModDownload.DlClientListResult)(loadMinecraft, panLoad, panAllBack, frameworkElement, ModDownload.DlClientListLoader, Sub(a0 As ModLoader.LoaderTask(Of String, ModDownload.DlClientListResult))
                 Me.LoadMinecraft_OnFinish()
             End Sub, Nothing, True)
         End Sub

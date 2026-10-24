@@ -598,7 +598,7 @@ Namespace PCL
                 Dim vb$AnonymousDelegate_7 As VB$AnonymousDelegate_4(Of ResourceProject, Double) = Function(Project As ResourceProject)
                     Dim type As ResourceTypes = CS$<>8__locals1.$VB$Local_Request.Type
                     If type <= ResourceTypes.ResourcePack Then
-                        If type - ResourceTypes.[Mod] <= 1 Then
+                        If type = ResourceTypes.[Mod] OrElse type = ResourceTypes.ModPack Then
                             Return CDbl(If((Project.Platform = ResourcePlatforms.CurseForge), 1, 5))
                         End If
                         If type <> ResourceTypes.ResourcePack Then

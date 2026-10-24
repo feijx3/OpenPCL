@@ -367,7 +367,7 @@ namespace PCL
             new Settings.Setting("SystemSystemCache", "", Settings.Sources.Registry, false, null),
             new Settings.Setting("SystemSystemUpdate", 0, Settings.Sources.Normal, false, null),
             new Settings.Setting("SystemSystemActivity", 0, Settings.Sources.Normal, false, null),
-            new Settings.Setting("SystemSystemTelemetry", true, Settings.Sources.Registry, false, null),
+            new Settings.Setting("SystemSystemTelemetry", false, Settings.Sources.Registry, false, null),
             new Settings.Setting("CacheDrops", "", Settings.Sources.Registry, false, null),
             new Settings.Setting("CacheConfig", 0, Settings.Sources.Registry, false, null),
             new Settings.Setting("CacheExportConfig", "", Settings.Sources.Registry, false, null),

@@ -20,8 +20,46 @@ Imports PCLCS
 Namespace PCL
     Public NotInheritable Module ModModpack
         Public Sub ModpackInstall()
-            ModMain.Hint("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……", ModMain.HintType.Red, True)
+            Dim file As String = Dialogs.SelectFile("选择整合包压缩包", False, Nothing, New OneOf(Of IEnumerable(Of ValueTuple(Of String(), String)), String)?("整合包文件(*.zip;*.rar;*.mrpack)|*.zip;*.rar;*.mrpack")).FirstOrDefault()
+            If file Is Nothing Then
+                Return
+            End If
+            ModBase.RunInNewThread(Sub()
+                                       Try
+                                           ModModpack.ModpackInstall(file, Nothing, Nothing)
+                                       Catch ex As Exception
+                                           If ex.IsCanceled() Then
+                                               Logger.Info("手动安装整合包已取消", LogBehavior.None)
+                                           Else
+                                               Logger.Error(ex, "手动安装整合包失败", LogBehavior.Alert)
+                                           End If
+                                       End Try
+                                   End Sub, "Modpack Install", ThreadPriority.Normal)
         End Sub
+
+        ' 0 CurseForge, 1 HMCL, 2 MultiMC/Prism, 3 MCBBS, 4 Modrinth, 5 带启动器的整合包, -1 未识别
+        Private Function DetectPackType(Archive As ZipArchive, Prefix As String) As Integer
+            If Archive.GetEntry(Prefix + "mcbbs.packmeta") IsNot Nothing Then
+                Return 3
+            End If
+            If Archive.GetEntry(Prefix + "mmc-pack.json") IsNot Nothing Then
+                Return 2
+            End If
+            If Archive.GetEntry(Prefix + "modrinth.index.json") IsNot Nothing Then
+                Return 4
+            End If
+            Dim entry As ZipArchiveEntry = Archive.GetEntry(Prefix + "manifest.json")
+            If entry IsNot Nothing Then
+                Return If(CType(entry.Open().ReadString(Encoding.UTF8).DeserializeJson(), JObject)("addons") Is Nothing, 0, 3)
+            End If
+            If Archive.GetEntry(Prefix + "modpack.json") IsNot Nothing Then
+                Return 1
+            End If
+            If Archive.GetEntry(Prefix + "modpack.zip") IsNot Nothing OrElse Archive.GetEntry(Prefix + "modpack.mrpack") IsNot Nothing Then
+                Return 5
+            End If
+            Return -1
+        End Function
 
         Public Function ModpackInstall(File As String, Optional InstanceName As String = Nothing, Optional Logo As String = Nothing) As ModLoader.LoaderCombo(Of String)
             Logger.Info(String.Format("整合包安装请求：{0}", If(File, "null")), LogBehavior.None, "E:\Projects\PCL\本体代码\OpenPCL\Modules\Minecraft\ModModpack.vb")
@@ -32,55 +70,21 @@ Namespace PCL
                     ModMain.Hint("游戏路径中不能含有感叹号或分号：" + text, ModMain.HintType.Red, True)
                     Throw New OperationCanceledException()
                 End If
+                Dim packType As Integer
+                Dim baseFolder As String = ""
                 Try
                     zipArchive = FileUtils.OpenZip(File, Nothing)
-                    If zipArchive.GetEntry("mcbbs.packmeta") Is Nothing Then
-                        If zipArchive.GetEntry("mmc-pack.json") Is Nothing Then
-                            If zipArchive.GetEntry("modrinth.index.json") Is Nothing Then
-                                If zipArchive.GetEntry("manifest.json") IsNot Nothing Then
-                                    If CType(zipArchive.GetEntry("manifest.json").Open().ReadString(Encoding.UTF8).DeserializeJson(), JObject)("addons") Is Nothing Then
-                                    End If
-                                ElseIf zipArchive.GetEntry("modpack.json") Is Nothing Then
-                                    If zipArchive.GetEntry("modpack.zip") Is Nothing AndAlso zipArchive.GetEntry("modpack.mrpack") Is Nothing Then
-                                        Try
-                                            For Each zipArchiveEntry As ZipArchiveEntry In zipArchive.Entries
-                                                Dim array As String() = zipArchiveEntry.FullName.Split("/", False)
-                                                Dim text2 As String = array(0) + "/"
-                                                If array.Count() = 2 Then
-                                                    If Operators.CompareString(array(1), "mcbbs.packmeta", False) = 0 Then
-                                                        Exit For
-                                                    End If
-                                                    If Operators.CompareString(array(1), "mmc-pack.json", False) = 0 Then
-                                                        Exit For
-                                                    End If
-                                                    If Operators.CompareString(array(1), "modrinth.index.json", False) = 0 Then
-                                                        Exit For
-                                                    End If
-                                                    If Operators.CompareString(array(1), "manifest.json", False) = 0 Then
-                                                        If CType(zipArchiveEntry.Open().ReadString(Encoding.UTF8).DeserializeJson(), JObject)("addons") Is Nothing Then
-                                                            Exit For
-                                                        End If
-                                                        Exit For
-                                                    Else
-                                                        If Operators.CompareString(array(1), "modpack.json", False) = 0 Then
-                                                            Exit For
-                                                        End If
-                                                        If Operators.CompareString(array(1), "modpack.zip", False) = 0 OrElse Operators.CompareString(array(1), "modpack.mrpack", False) = 0 Then
-                                                            Exit For
-                                                        End If
-                                                    End If
-                                                End If
-                                            Next
-                                        Finally
-                                            Dim enumerator As IEnumerator(Of ZipArchiveEntry)
-                                            If enumerator IsNot Nothing Then
-                                                enumerator.Dispose()
-                                            End If
-                                        End Try
-                                    End If
-                                End If
+                    packType = ModModpack.DetectPackType(zipArchive, "")
+                    If packType = -1 Then
+                        Dim markers As String() = New String() {"mcbbs.packmeta", "mmc-pack.json", "modrinth.index.json", "manifest.json", "modpack.json", "modpack.zip", "modpack.mrpack"}
+                        For Each zipArchiveEntry As ZipArchiveEntry In zipArchive.Entries
+                            Dim array As String() = zipArchiveEntry.FullName.Split("/"c)
+                            If array.Length = 2 AndAlso markers.Contains(array(1)) Then
+                                baseFolder = array(0) + "/"
+                                packType = ModModpack.DetectPackType(zipArchive, baseFolder)
+                                Exit For
                             End If
-                        End If
+                        Next
                     End If
                 Catch ex As Exception
                     If ex.GetDisplay(True).Contains("Error.WinIOError") Then
@@ -91,14 +95,26 @@ Namespace PCL
                     End If
                     Throw New Exception("打开整合包文件失败，文件可能损坏或为不支持的压缩包格式", ex)
                 End Try
-                Throw New Exception("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……")
+                Select Case packType
+                    Case 0
+                        Return ModModpack.InstallPackCurseForge(File, zipArchive, baseFolder, InstanceName, Logo)
+                    Case 1
+                        Return ModModpack.InstallPackHMCL(File, zipArchive, baseFolder)
+                    Case 2
+                        Return ModModpack.InstallPackMMC(File, zipArchive, baseFolder)
+                    Case 3
+                        Return ModModpack.InstallPackMCBBS(File, zipArchive, baseFolder, InstanceName)
+                    Case 4
+                        Return ModModpack.InstallPackModrinth(File, zipArchive, baseFolder, InstanceName, Logo)
+                    Case 5
+                        Return ModModpack.InstallPackLauncherPack(File, zipArchive, baseFolder)
+                    Case Else
+                        Return ModModpack.InstallPackCompress(File, zipArchive)
+                End Select
             Finally
                 If zipArchive IsNot Nothing Then
                     zipArchive.Dispose()
-                    GoTo IL_02EE
                 End If
-                GoTo IL_02EE
-                IL_02EE:
             End Try
         End Function
 

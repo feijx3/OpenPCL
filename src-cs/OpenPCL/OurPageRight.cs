@@ -525,7 +525,7 @@ namespace PCL
                         this.PageState = OurPageRight.PageStates.ContentExit;
                         return;
                     }
-                    if (pageState2 - OurPageRight.PageStates.ContentEnter <= 1)
+                    if (pageState2 == OurPageRight.PageStates.ContentEnter || pageState2 == OurPageRight.PageStates.ContentStay)
                     {
                         this.PageState = OurPageRight.PageStates.ContentExit;
                         this.TriggerExitAnimation(new FrameworkElement[] { this.PanContent });

@@ -23,21 +23,12 @@ namespace PCL
             base.Loaded += this.PageSetupSystem_Loaded;
             this.InitializeComponent();
             this.SliderDownloadThread_WithEvents = this.SliderDownloadThread;
-            this.ComboSystemUpdate_WithEvents = this.ComboSystemUpdate;
-            this.ComboSystemActivity_WithEvents = this.ComboSystemActivity;
-            this.BtnSystemUpdate_WithEvents = this.BtnSystemUpdate;
-            this.BtnSystemSettingExp_WithEvents = this.BtnSystemSettingExp;
-            this.BtnSystemSettingImp_WithEvents = this.BtnSystemSettingImp;
-            this.BtnSystemIdentify_WithEvents = this.BtnSystemIdentify;
-            this.BtnSystemUnlock_WithEvents = this.BtnSystemUnlock;
             this.CheckDebugMode_WithEvents = this.CheckDebugMode;
         }
 
         private void PageSetupSystem_Loaded(object sender, RoutedEventArgs e)
         {
             this.PanBack.ScrollToHome();
-            this.PanDonate.Visibility = Visibility.Visible;
-            this.ItemSystemUpdateDownload.Content = "在有新版本时自动下载（更新快照版前需要先输入土豆码）";
             if (this._STATIC_PageSetupSystem_Loaded_20211C128141_IsLoaded_Init == null)
             {
                 Interlocked.CompareExchange<StaticLocalInitFlag>(ref this._STATIC_PageSetupSystem_Loaded_20211C128141_IsLoaded_Init, new StaticLocalInitFlag(), null);
@@ -113,15 +104,7 @@ namespace PCL
             }
         }
 
-        private void BtnSystemIdentify_Click(object sender, MouseButtonEventArgs e)
-        {
-            PageOtherAbout.CopyIdentify();
-        }
 
-        private void BtnSystemUnlock_Click(object sender, MouseButtonEventArgs e)
-        {
-            ModSecret.InputPotatoCode(false);
-        }
 
         private void CheckDebugMode_Change()
         {
@@ -131,59 +114,16 @@ namespace PCL
             }
         }
 
-        private void ComboSystemActivity_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ModAnimation.AniControlEnabled == 0 && this.ComboSystemActivity.SelectedIndex == 2 && ModMain.OurMsgBox("若选择此项，即使在将来出现严重问题时，你也无法获取相关通知。\r\n例如，如果发现某个版本游戏存在严重 Bug，你可能就会因为无法得到通知而导致无法预知的后果。\r\n\r\n一般选择 仅在有重要通知时显示公告 就可以让你尽量不受打扰了。\r\n除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", "", true, true, false, null, null, null) == 2 && e.RemovedItems.Count > 0)
-            {
-                this.ComboSystemActivity.SelectedItem = RuntimeHelpers.GetObjectValue(e.RemovedItems[0]);
-            }
-        }
 
-        private void ComboSystemUpdate_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ModAnimation.AniControlEnabled == 0 && this.ComboSystemUpdate.SelectedIndex == 3 && ModMain.OurMsgBox("若选择此项，即使在启动器将来出现严重问题时，你也无法获取更新并获得修复。\r\n例如，如果官方修改了登录方式，从而导致现有启动器无法登录，你可能就会因为无法更新而无法开始游戏。\r\n\r\n一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。\r\n除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", "", true, true, false, null, null, null) == 2 && e.RemovedItems.Count > 0)
-            {
-                this.ComboSystemUpdate.SelectedItem = RuntimeHelpers.GetObjectValue(e.RemovedItems[0]);
-            }
-        }
 
-        private void BtnSystemUpdate_Click(object sender, EventArgs e)
-        {
-            ModSecret.UpdateCheckByButton();
-        }
 
         public static bool? IsLauncherNewest()
         {
-            bool? flag;
-            try
-            {
-                string text = FileUtils.TryReadAsString(ModBase.PathTemp + "Cache\\Notice.cfg", null, null) ?? "";
-                if (text.Split("|", false).Count<string>() < 3)
-                {
-                    flag = null;
-                }
-                else
-                {
-                    flag = new bool?(Conversions.ToDouble(text.Split("|", false)[1]) <= 414.0);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "确认启动器更新失败", LogBehavior.AlertThenFeedback, "E:\\Projects\\PCL\\本体代码\\Plain Craft Launcher 2\\Pages\\PageSetup\\PageSetupSystem.xaml.vb");
-                flag = null;
-            }
-            return flag;
+            // 此构建不再与上游启动器比较版本。
+            return null;
         }
 
-        private void BtnSystemSettingExp_Click(object sender, MouseButtonEventArgs e)
-        {
-            ModMain.Hint("该功能尚在开发中！", ModMain.HintType.Blue, true);
-        }
 
-        private void BtnSystemSettingImp_Click(object sender, MouseButtonEventArgs e)
-        {
-            ModMain.Hint("该功能尚在开发中！", ModMain.HintType.Blue, true);
-        }
 
 
 
@@ -222,191 +162,16 @@ namespace PCL
 
 
 
-        internal virtual OurComboBox ComboSystemUpdate_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._ComboSystemUpdate;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                SelectionChangedEventHandler selectionChangedEventHandler = new SelectionChangedEventHandler(this.ComboSystemUpdate_SelectionChanged);
-                OurComboBox ourComboBox = this._ComboSystemUpdate;
-                if (ourComboBox != null)
-                {
-                    ourComboBox.SelectionChanged -= selectionChangedEventHandler;
-                }
-                this._ComboSystemUpdate = value;
-                ourComboBox = this._ComboSystemUpdate;
-                if (ourComboBox != null)
-                {
-                    ourComboBox.SelectionChanged += selectionChangedEventHandler;
-                }
-            }
-        }
-
-
-        internal virtual OurComboBox ComboSystemActivity_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._ComboSystemActivity;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                SelectionChangedEventHandler selectionChangedEventHandler = new SelectionChangedEventHandler(this.ComboSystemActivity_SelectionChanged);
-                OurComboBox ourComboBox = this._ComboSystemActivity;
-                if (ourComboBox != null)
-                {
-                    ourComboBox.SelectionChanged -= selectionChangedEventHandler;
-                }
-                this._ComboSystemActivity = value;
-                ourComboBox = this._ComboSystemActivity;
-                if (ourComboBox != null)
-                {
-                    ourComboBox.SelectionChanged += selectionChangedEventHandler;
-                }
-            }
-        }
 
 
 
-        internal virtual OurButton BtnSystemUpdate_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._BtnSystemUpdate;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                OurButton.ClickEventHandler clickEventHandler = new OurButton.ClickEventHandler(this.BtnSystemUpdate_Click);
-                OurButton ourButton = this._BtnSystemUpdate;
-                if (ourButton != null)
-                {
-                    ourButton.Click -= clickEventHandler;
-                }
-                this._BtnSystemUpdate = value;
-                ourButton = this._BtnSystemUpdate;
-                if (ourButton != null)
-                {
-                    ourButton.Click += clickEventHandler;
-                }
-            }
-        }
-
-        internal virtual OurButton BtnSystemSettingExp_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._BtnSystemSettingExp;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                OurButton.ClickEventHandler clickEventHandler = new OurButton.ClickEventHandler(this.BtnSystemSettingExp_Click);
-                OurButton ourButton = this._BtnSystemSettingExp;
-                if (ourButton != null)
-                {
-                    ourButton.Click -= clickEventHandler;
-                }
-                this._BtnSystemSettingExp = value;
-                ourButton = this._BtnSystemSettingExp;
-                if (ourButton != null)
-                {
-                    ourButton.Click += clickEventHandler;
-                }
-            }
-        }
-
-        internal virtual OurButton BtnSystemSettingImp_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._BtnSystemSettingImp;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                OurButton.ClickEventHandler clickEventHandler = new OurButton.ClickEventHandler(this.BtnSystemSettingImp_Click);
-                OurButton ourButton = this._BtnSystemSettingImp;
-                if (ourButton != null)
-                {
-                    ourButton.Click -= clickEventHandler;
-                }
-                this._BtnSystemSettingImp = value;
-                ourButton = this._BtnSystemSettingImp;
-                if (ourButton != null)
-                {
-                    ourButton.Click += clickEventHandler;
-                }
-            }
-        }
 
 
-        internal virtual OurButton BtnSystemIdentify_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._BtnSystemIdentify;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                OurButton.ClickEventHandler clickEventHandler = new OurButton.ClickEventHandler(this.BtnSystemIdentify_Click);
-                OurButton ourButton = this._BtnSystemIdentify;
-                if (ourButton != null)
-                {
-                    ourButton.Click -= clickEventHandler;
-                }
-                this._BtnSystemIdentify = value;
-                ourButton = this._BtnSystemIdentify;
-                if (ourButton != null)
-                {
-                    ourButton.Click += clickEventHandler;
-                }
-            }
-        }
 
-        internal virtual OurButton BtnSystemUnlock_WithEvents
-        {
-            [CompilerGenerated]
-            get
-            {
-                return this._BtnSystemUnlock;
-            }
-            [CompilerGenerated]
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                OurButton.ClickEventHandler clickEventHandler = new OurButton.ClickEventHandler(this.BtnSystemUnlock_Click);
-                OurButton ourButton = this._BtnSystemUnlock;
-                if (ourButton != null)
-                {
-                    ourButton.Click -= clickEventHandler;
-                }
-                this._BtnSystemUnlock = value;
-                ourButton = this._BtnSystemUnlock;
-                if (ourButton != null)
-                {
-                    ourButton.Click += clickEventHandler;
-                }
-            }
-        }
+
+
+
+
 
 
 
@@ -493,49 +258,16 @@ namespace PCL
         [AccessedThroughProperty("CheckHelpChinese")]
         private OurCheckBox _CheckHelpChinese;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("ComboSystemUpdate")]
-        private OurComboBox _ComboSystemUpdate;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("ItemSystemUpdateDownload")]
-        private OurComboBoxItem _ItemSystemUpdateDownload;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("ComboSystemActivity")]
-        private OurComboBox _ComboSystemActivity;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("TextSystemCache")]
-        private OurTextBox _TextSystemCache;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("CheckSystemTelemetry")]
-        private OurCheckBox _CheckSystemTelemetry;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("BtnSystemUpdate")]
-        private OurButton _BtnSystemUpdate;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("BtnSystemSettingExp")]
-        private OurButton _BtnSystemSettingExp;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("BtnSystemSettingImp")]
-        private OurButton _BtnSystemSettingImp;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("PanDonate")]
-        private Grid _PanDonate;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("BtnSystemIdentify")]
-        private OurButton _BtnSystemIdentify;
 
-        [CompilerGenerated]
-        [AccessedThroughProperty("BtnSystemUnlock")]
-        private OurButton _BtnSystemUnlock;
 
         [CompilerGenerated]
         [AccessedThroughProperty("CardDebug")]
