@@ -1,0 +1,107 @@
+<local:OurPageRight
+	x:Class="PCL.PageDownloadMod"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:PCL"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	PanScroll="Content">
+	<!--未知连接 ID: 1-->
+	<local:PageResource
+		x:Name="Content"
+		PageType="Mod"
+		TypeName="Mod"
+		TypeNameSpaced=" Mod ">
+		<local:OurComboBoxItem
+			Content="全部"
+			Tag=""
+			IsSelected="True" />
+		<local:OurComboBoxItem
+			Content="世界元素"
+			Tag="406/worldgen" />
+		<local:OurComboBoxItem
+			Content="生物群系"
+			Tag="407/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="维度"
+			Tag="410/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="矿物与资源"
+			Tag="408/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="天然结构"
+			Tag="409/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="科技"
+			Tag="412/technology" />
+		<local:OurComboBoxItem
+			Content="管道与物流"
+			Tag="415/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="自动化"
+			Tag="4843/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="能源"
+			Tag="417/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="红石"
+			Tag="4558/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="食物与烹饪"
+			Tag="436/food" />
+		<local:OurComboBoxItem
+			Content="农业"
+			Tag="416/"
+			Margin="15,0,0,0" />
+		<local:OurComboBoxItem
+			Content="游戏机制"
+			Tag="/game-mechanics" />
+		<local:OurComboBoxItem
+			Content="运输"
+			Tag="414/transportation" />
+		<local:OurComboBoxItem
+			Content="仓储"
+			Tag="420/storage" />
+		<local:OurComboBoxItem
+			Content="魔法"
+			Tag="419/magic" />
+		<local:OurComboBoxItem
+			Content="冒险"
+			Tag="422/adventure" />
+		<local:OurComboBoxItem
+			Content="装饰"
+			Tag="424/decoration" />
+		<local:OurComboBoxItem
+			Content="生物"
+			Tag="411/mobs" />
+		<local:OurComboBoxItem
+			Content="实用"
+			Tag="5191/utility" />
+		<local:OurComboBoxItem
+			Content="装备与工具"
+			Tag="434/equipment" />
+		<local:OurComboBoxItem
+			Content="创造模式"
+			Tag="9026/" />
+		<local:OurComboBoxItem
+			Content="性能优化"
+			Tag="6814/optimization" />
+		<local:OurComboBoxItem
+			Content="信息显示"
+			Tag="423/" />
+		<local:OurComboBoxItem
+			Content="服务器"
+			Tag="435/social" />
+		<local:OurComboBoxItem
+			Content="支持库"
+			Tag="421/library" />
+	</local:PageResource>
+</local:OurPageRight>

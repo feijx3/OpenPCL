@@ -103,9 +103,11 @@
 
 两个按钮都在，点下去都只会弹一句"该功能尚在开发中"。把收费入口做得这么完整的同时，设置导出还没做完——这个优先级，无可指摘。
 
-### 11. `My` 开头的类型：47 个
+### 11. `My` 开头的类型：47 个（现已全部改名 `Our`）
 
-`MyButton`、`MyCard`、`MyCheckBox`、`MyMsgText`……全程 "My"，一个 "Our" 都没有。命名上的团结程度，令人羡慕。
+原来是 `MyButton`、`MyCard`、`MyCheckBox`、`MyMsgText`……全程 "My"，一个 "Our" 都没有。命名上的团结程度，令人羡慕。
+
+**OpenPCL 已经把它们全改成了 `OurButton`、`OurCard`、`OurCheckBox`、`OurMsgText`……**，这一条不再成立。（VB 编译器自己认的名字，如 `MyBase`、`MyClass`、`MyProject`，和一条叫 `MyDownload` 的磁盘路径没动，见下文《OpenPCL：重命名与构建》。）
 
 ### 12. 作者的 E 盘
 
@@ -125,7 +127,7 @@
 | C# 总行数 | ≈ 93,786 |
 | 最长的文件 | `ModDownloadLib.cs`，3,421 行 |
 | 静态 `Module` | 20 个 |
-| `My` 开头的类型 | 47 个 |
+| `My` 开头的类型 | 47 个（OpenPCL 中已改为 `Our`） |
 | `VB$AnonymousDelegate_N.cs` | 27 个（编译器生成，没人认领） |
 | `goto` 标签（`IL_xxxx:`） | 307 个（VB 的 `On Error` 翻译成 C# 的遗迹） |
 | 弹出"提示气泡"的调用 | 232 处 |
@@ -142,22 +144,68 @@
 
 反编译 7 秒，读懂它花了 20 分钟。**拆开一个东西，永远比看懂它快得多。**
 
+## OpenPCL：重命名与构建
+
+> 这一节说的是 **OpenPCL** 这个分支做了什么，以及怎么把它重新编出一个 `OpenPCL.exe`。
+
+### 改了什么
+
+- **`My*` → `Our*`**：所有 `My` + 大写字母开头的类型、控件、方法、文件、XAML 样式键、`PCL.My` 命名空间和反编译器起的局部变量（`myRect` → `ourRect`）。
+- **软件改名为 OpenPCL**：程序集名、工程 / 图标 / 解决方案名、窗口标题、`pack://` 资源地址、运行时拼出来的 XAML 里的 `assembly=`。产物是 `OpenPCL.exe`。标题栏左上角那个用矢量线条画的 "PCL" 徽标也重画成了 "OpenPCL"（原来 PCL 三个字母的路径原样保留，前面补了 Open，窗口里的彩蛋徽标同步）。关于页和 exe 图标里的六边形 "PCL" 是位图，没改。
+- **刻意没动**：命名空间 `PCL`；`PCL\` 数据目录与注册表键；`PCL2 …` 开头的日志文件名 / 皮肤包名 / User-Agent / CDN 盐（改了会让现有数据和服务端校验失效）；作者源码路径字符串；`MyBase`、`MyClass` 等 VB 关键字；版权声明。
+- **遥测、公告、更新这些行为一个字没改**——它们和上面的猎奇清单里写的一样，仍在原处。想关就去设置页，或者另开一个 PR。
+
+### 怎么构建
+
+需要 Windows、.NET Framework 4.8，以及带 Roslyn 的 **Visual Studio 2019+ / Build Tools 的 MSBuild**（装上"使用 .NET 的桌面开发"工作负载，WPF 编译目标才在）。.NET Framework 自带的老 MSBuild 只会 C# 5，编不了。
+
+```powershell
+.\build.ps1                      # 自动找 MSBuild（vswhere / 常见路径）
+.\build.ps1 -MSBuild "D:\VSS\MSBuild\Current\Bin\MSBuild.exe"
+```
+
+产物：`dist\OpenPCL.exe`。脚本会先把内嵌在 `PCL.Resources.resx` 里的第三方程序集解出来放进 `src-cs\lib`（仅作编译引用；运行时程序仍然从自己的资源里加载它们，和原版一样是单文件）。
+
+三个库（`MeloongCore`、`MeloongCore.Wpf`、`PCLCS`）**不是从源码编的**：它们是 C# 12 写的，反编译出来要大改；而且里面没有 `My*`。构建直接用原 exe 里提取出来的那三个 DLL，所以 `src-cs/MeloongCore*`、`src-cs/PCLCS` 只是供阅读的反编译源码。
+
+### 为了让反编译产物真的能编、能跑，做了哪些事
+
+默认选项反编译出来的 C# **根本编不过**（约 4,400 处非法标识符、30 处 VB `On Error` 反编译失败、编译器生成的 139 个闭包类被藏起来了……）。所以 `src-cs/OpenPCL` 不是原来那份反编译，而是用 `dnSpy.Console --show-all --no-anon-methods …` 对 exe **重新反编译**后再修的：
+
+- 合法化 `$STATIC$…`、`CS$<>8__locals1`、`<>c__DisplayClass` 之类的名字；
+- 15 个 `On Error Resume Next` 方法按"出错后从下一条顶层语句继续"重写；
+- VB 的 `WithEvents` 属性与 XAML 生成的字段重名：属性删掉，或改成 `X_WithEvents` 并在 `InitializeComponent()` 之后接线（保留原来的挂 / 摘事件代码）；
+- VB 迭代器状态机、`Implements`、`ByRef` 默认值、`For Each` 迭代变量赋值、`If(a, b)`、委托宽松转换等 VB 惯用法的 C# 等价写法；
+- 补回 `Application.xaml` 里反编译丢掉的 `StartupUri="FormMain.xaml"`（原版把它写在生成的 `InitializeComponent` 里，BAML 反编译看不到——不补的话只有启动画面，没有主窗口）；
+- 内嵌资源的名字固定成 `PCL.Resources.resources`（VB 的命名规则），否则运行时加载不到内嵌 DLL；
+- `Prefer32Bit=false`：原版是 AnyCPU（64 位进程），要提取的 `libwebp64.dll` 也是 64 位的。
+
+### 验证了什么（以及没验证什么）
+
+- 反编译器会悄悄丢掉 `op_Implicit` 调用和把 VB 的 `Is` 写成 `==`：这类错误**能编译、不报错、行为不对**。所以拿原 exe 和新 exe 逐方法对比了 IL 里转换运算符和 `==` / `!=` 运算符的调用数，补回了 `MyColor→Color / SolidColorBrush` 的 13 处转换，并用 Roslyn 把 105 处本应是引用比较的 `==` / `!=`（`McInstance`、`NetThread`、`ResourceProject`、`SearchRequest`）改成了引用比较——其中 `McInstance` 的 `==` 实现里那一处会无限递归，直接栈溢出。
+- 在隔离目录（`%APPDATA%` 重定向、网络指向一个拒绝连接的代理）里启动过：进入主窗口、界面与主题正常渲染、日志的启动序列与原版一致。**没有**实际启动过游戏、登录、下载、联机，也没有逐页点过 UI。
+- 这是反编译再编译的产物，**不保证与原版逐字节、逐行为一致**。遇到问题欢迎对照原 exe 排查。
+
 ## 仓库说明
 
 ```text
 .
-├── src-cs/    # C# 版（读起来更顺）
-└── src-vb/    # VB 版（更接近原貌，goto 也更多）
+├── build.ps1        # 构建 OpenPCL（见上）
+├── src-cs/
+│   ├── OpenPCL/            # 可构建的 C# 主程序（重命名、修复后的版本）
+│   ├── MeloongCore*/ PCLCS/  # 三个库的反编译源码，仅供阅读，不参与构建
+│   ├── Directory.Build.props # 构建配置（语言版本、框架引用路径、64 位）
+│   └── solution.sln
+└── src-vb/          # VB 版（更接近原貌，goto 也更多；同样改了名，但没有构建过）
 ```
 
-- 只包含 `.cs` / `.vb` / `.xaml` 和工程文件。**没有** exe、dll、图片、字体、资源 blob，**没有**任何人的 API 密钥。
+- 只包含 `.cs` / `.vb` / `.xaml` 和工程文件。**没有** exe、dll、图片、字体、资源 blob，**没有**任何人的 API 密钥。构建需要的那些（图片、字体、`PCL.Resources.resx`）在本地工作区里，但被 `.gitignore` 挡在仓库外——从干净的克隆构建前，要先用 dnSpy 对原 exe 重新导出一遍。
 - `PCLCS`、`MeloongCore`、`MeloongCore.Wpf` 三个库原本以字节数组藏在 exe 的资源里，已被提取并一并反编译。
-- **不一定能编译**：缺图片、缺资源、缺第三方库（Newtonsoft.Json、NAudio 等请用 NuGet），反编译产物通常还要手工修几处。欢迎 PR。
-- 变量名里的 `flag`、`text2`、`CS$<>8__locals1` 是反编译器起的，不是作者的审美。
+- 变量名里的 `flag`、`text2`、`CS_locals1` 是反编译器起的，不是作者的审美。
 
 ## 免责声明
 
 - 本仓库与 Plain Craft Launcher 的原作者**无任何关联**。
 - 源码由反编译器自动生成，**版权归全体我的世界用户所有**。本文属于对程序行为的批判性性评论，仅供学习与研究。
-- 上文所有描述均来自对代码的静态阅读，**未经运行验证**。如有错误，欢迎指出，我们会改。
+- 上文《猎奇清单》里的所有描述均来自对代码的静态阅读，**未经运行验证**。如有错误，欢迎指出，我们会改。（OpenPCL 构建物的验证范围见《OpenPCL：重命名与构建》。）
 - 如果原权利人对本仓库有异议，请联系仓库维护者。虽然我也懒得鸟你^^

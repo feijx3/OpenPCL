@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Prefer32Bit>false</Prefer32Bit>
+    <FrameworkPathOverride>$(windir)\Microsoft.NET\Framework64\v4.0.30319</FrameworkPathOverride>
+    <ReferencePath>$(MSBuildThisFileDirectory)lib;$(windir)\Microsoft.NET\Framework64\v4.0.30319\Facades</ReferencePath>
+    <NoWarn>$(NoWarn);CS0108;CS0114;CS0162;CS0168;CS0169;CS0219;CS0649;CS0414;CS1591;CS8632;CS0105;CS0109;CS0618;CS0659;CS0661;CS0252;CS0253;CS1717;CS0672;CS0067;CS0436;CS0626;CS1998;CS4014;MSB3277;MSB3270;CS0472;CS0642;CS0164;CS0612</NoWarn>
+  </PropertyGroup>
+</Project>

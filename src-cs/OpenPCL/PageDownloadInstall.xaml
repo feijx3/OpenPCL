@@ -1,0 +1,1109 @@
+<local:OurPageRight
+	x:Class="PCL.PageDownloadInstall"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:PCL"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	PanScroll="PanBack">
+	<Grid>
+		<!--未知连接 ID: 1-->
+		<Grid
+			Name="PanAllBack">
+			<!--未知连接 ID: 2-->
+			<local:OurScrollViewer
+				x:Name="PanBack"
+				VerticalScrollBarVisibility="Auto"
+				HorizontalScrollBarVisibility="Disabled">
+				<!--未知连接 ID: 3-->
+				<Grid
+					Name="PanInner"
+					Margin="25,10,25,25">
+					<!--未知连接 ID: 4-->
+					<StackPanel
+						Name="PanMinecraft"
+						Grid.Row="1"
+						Grid.IsSharedSizeScope="True"
+						Margin="0,0,0,-10">
+						<UIElement.RenderTransform>
+							<TranslateTransform />
+						</UIElement.RenderTransform>
+					</StackPanel>
+					<!--未知连接 ID: 5-->
+					<StackPanel
+						x:Name="PanSelect"
+						Grid.Row="1"
+						Visibility="Collapsed"
+						Opacity="0"
+						IsHitTestVisible="False"
+						Margin="0,0,0,45">
+						<FrameworkElement.Resources>
+							<ResourceDictionary>
+								<Style
+									x:Key="ModifyCompareIcon"
+									TargetType="{x:Type local:OurImage}">
+									<Setter
+										Property="Width"
+										Value="18" />
+									<Setter
+										Property="Height"
+										Value="18" />
+									<Setter
+										Property="RenderOptions.BitmapScalingMode"
+										Value="Linear" />
+								</Style>
+								<Style
+									x:Key="ModifyCompareText"
+									TargetType="{x:Type TextBlock}"
+									BasedOn="{StaticResource BasedOnTextBlock}">
+									<Setter
+										Property="Margin"
+										Value="7,0,0,0" />
+									<Setter
+										Property="VerticalAlignment"
+										Value="Center" />
+								</Style>
+								<Style
+									x:Key="ModifyCompareArrow"
+									TargetType="{x:Type Path}">
+									<Setter
+										Property="Data"
+										Value="M3,3 L7,7 L3,11 M9,3 L13,7 L9,11" />
+									<Setter
+										Property="Margin"
+										Value="10,0,18,0" />
+									<Setter
+										Property="Height"
+										Value="14" />
+									<Setter
+										Property="HorizontalAlignment"
+										Value="Center" />
+									<Setter
+										Property="VerticalAlignment"
+										Value="Center" />
+									<Setter
+										Property="Stroke"
+										Value="{DynamicResource ColorBrushGray2}" />
+									<Setter
+										Property="StrokeThickness"
+										Value="1.4" />
+									<Setter
+										Property="Shape.StrokeStartLineCap"
+										Value="Round" />
+									<Setter
+										Property="Shape.StrokeEndLineCap"
+										Value="Round" />
+									<Setter
+										Property="Shape.StrokeLineJoin"
+										Value="Round" />
+								</Style>
+								<sys:String
+									x:Key="ModifyRestoreLogo">M9.83,3.17 A1.18,1.18 0 0 1 9.83,4.83 L6.85,7.82 H14.5 A6.68,6.68 0 0 1 14.5,21.18 H11 A1.18,1.18 0 0 1 11,18.82 H14.5 A4.32,4.32 0 0 0 14.5,10.18 H6.85 L9.83,13.17 A1.18,1.18 0 0 1 8.17,14.83 L3.17,9.83 A1.18,1.18 0 0 1 3.17,8.17 L8.17,3.17 A1.18,1.18 0 0 1 9.83,3.17 Z</sys:String>
+								<sys:String
+									x:Key="ModifyClearLogo">F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z</sys:String>
+								<Style
+									x:Key="ModifyRestoreButton"
+									TargetType="{x:Type local:OurIconButton}">
+									<Setter
+										Property="Visibility"
+										Value="Collapsed" />
+									<Setter
+										Property="Height"
+										Value="30" />
+									<Setter
+										Property="Width"
+										Value="30" />
+									<Setter
+										Property="HorizontalAlignment"
+										Value="Right" />
+									<Setter
+										Property="VerticalAlignment"
+										Value="Top" />
+									<Setter
+										Property="Margin"
+										Value="0,5,32,0" />
+									<Setter
+										Property="FrameworkElement.ToolTip"
+										Value="撤销更改" />
+									<Setter
+										Property="FrameworkElement.Cursor"
+										Value="Hand" />
+								</Style>
+								<Style
+									x:Key="ModifyClearButton"
+									TargetType="{x:Type local:OurIconButton}">
+									<Setter
+										Property="Height"
+										Value="30" />
+									<Setter
+										Property="Width"
+										Value="30" />
+									<Setter
+										Property="HorizontalAlignment"
+										Value="Right" />
+									<Setter
+										Property="VerticalAlignment"
+										Value="Top" />
+									<Setter
+										Property="Margin"
+										Value="0,5,32,0" />
+									<Setter
+										Property="FrameworkElement.ToolTip"
+										Value="取消安装" />
+								</Style>
+							</ResourceDictionary>
+						</FrameworkElement.Resources>
+						<UIElement.RenderTransform>
+							<TranslateTransform
+								X="40" />
+						</UIElement.RenderTransform>
+						<!--未知连接 ID: 6-->
+						<local:OurCard
+							x:Name="CardSelectName"
+							Margin="0,15,0,15"
+							MinHeight="62">
+							<!--未知连接 ID: 7-->
+							<local:OurIconButton
+								x:Name="BtnBack"
+								HorizontalAlignment="Left"
+								Theme="Black"
+								Opacity="0.6"
+								Margin="13,0,0,0"
+								Height="26"
+								Width="26"
+								LogoScale="0.87"
+								Logo="M1097 584 250 584 562 896C591 925 591 972 562 1001 533 1030 487 1030 458 1001L21 565C6 550-0 531 0 511L0 511 0 511C-0 492 6 472 21 457L458 21C487-7 533-7 562 21 591 50 591 97 562 126L250 438 1097 438C1137 438 1170 471 1170 511 1170 551 1137 584 1097 584L1097 584Z" />
+							<!--未知连接 ID: 8-->
+							<local:OurImage
+								x:Name="ImgLogo"
+								Margin="52,15,0,0"
+								VerticalAlignment="Top"
+								HorizontalAlignment="Left"
+								Height="32"
+								RenderOptions.BitmapScalingMode="HighQuality" />
+							<!--未知连接 ID: 9-->
+							<local:OurTextBox
+								x:Name="TextSelectName"
+								Margin="93,16,16,0"
+								Padding="-1,0"
+								MinHeight="30"
+								FontSize="15"
+								VerticalAlignment="Top"
+								MaxLength="70"
+								HasBackground="False"
+								ShowValidateResult="False" />
+							<!--未知连接 ID: 10-->
+							<TextBlock
+								x:Name="LabSelectName"
+								Visibility="Collapsed"
+								Height="21"
+								Margin="56,47,42,11"
+								Padding="0,4,0,0"
+								VerticalAlignment="Top"
+								FontSize="12.5"
+								Foreground="{DynamicResource ColorBrushGray3}"
+								TextTrimming="CharacterEllipsis" />
+							<!--未知连接 ID: 11-->
+							<local:OurIconButton
+								x:Name="BtnOriginalNameRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Margin="0,16,6,0"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 12-->
+						<local:OurHint
+							x:Name="HintSelectName"
+							Theme="Red"
+							Visibility="Collapsed" />
+						<!--未知连接 ID: 13-->
+						<local:OurHint
+							x:Name="HintFabricAPI"
+							Text="如果不安装 Fabric API，大多数 Mod 都会无法使用！"
+							Margin="0,10,0,0"
+							Theme="Red" />
+						<!--未知连接 ID: 14-->
+						<local:OurHint
+							x:Name="HintOptiFabric"
+							Text="必须安装 OptiFabric 才能正常使用 OptiFine！"
+							Margin="0,10,0,0"
+							Theme="Red" />
+						<!--未知连接 ID: 15-->
+						<local:OurHint
+							x:Name="HintOptiFabricOld"
+							Text="安装结束后，请在 Mod 下载中搜索 OptiFabric Origins 并下载，否则 OptiFine 会无法使用！"
+							Margin="0,10,0,0"
+							Theme="Yellow" />
+						<!--未知连接 ID: 16-->
+						<local:OurHint
+							x:Name="HintModOptiFine"
+							Text="OptiFine 与一部分 Mod 的兼容性不佳，请谨慎安装。"
+							Margin="0,10,0,0"
+							Theme="Yellow" />
+						<!--未知连接 ID: 17-->
+						<local:OurCard
+							x:Name="CardMinecraft"
+							Title="Minecraft"
+							Height="40"
+							Margin="0,12,0,0"
+							Visibility="Collapsed">
+							<!--未知连接 ID: 18-->
+							<Grid
+								x:Name="PanMinecraftInfo"
+								Height="18"
+								Margin="132,11,35,0"
+								VerticalAlignment="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 19-->
+								<local:OurImage
+									x:Name="ImgMinecraft"
+									Height="18"
+									Width="18"
+									Margin="0,0,7,0"
+									RenderOptions.BitmapScalingMode="Linear" />
+								<!--未知连接 ID: 20-->
+								<TextBlock
+									x:Name="LabMinecraftVersion"
+									Grid.Column="1"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis" />
+							</Grid>
+							<!--未知连接 ID: 21-->
+							<Grid
+								x:Name="PanMinecraftCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<!--未知连接 ID: 22-->
+									<local:OurImage
+										x:Name="ImgMinecraftOld"
+										Style="{StaticResource ModifyCompareIcon}"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 23-->
+									<TextBlock
+										x:Name="LabMinecraftOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<!--未知连接 ID: 24-->
+									<local:OurImage
+										x:Name="ImgMinecraftNew"
+										Style="{StaticResource ModifyCompareIcon}"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 25-->
+									<TextBlock
+										x:Name="LabMinecraftNew"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<Grid
+								Height="40"
+								VerticalAlignment="Top"
+								Background="#00FFFFFF"
+								Cursor="Hand">
+								<Path
+									HorizontalAlignment="Right"
+									Margin="0,0,16,0"
+									Stretch="Uniform"
+									Height="6"
+									Width="10"
+									Fill="{StaticResource ColorBrush1}"
+									RenderTransformOrigin="0.5,0.5"
+									Data="M2,4 L0,6 L10,16 L20,6 L18,4 L10,12 L2,4 Z">
+									<UIElement.RenderTransform>
+										<RotateTransform
+											Angle="270" />
+									</UIElement.RenderTransform>
+								</Path>
+							</Grid>
+							<!--未知连接 ID: 26-->
+							<local:OurIconButton
+								x:Name="BtnMinecraftRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 27-->
+						<local:OurCard
+							x:Name="CardForge"
+							Title="Forge"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<!--未知连接 ID: 28-->
+							<StackPanel
+								Name="PanForge"
+								Margin="20,40,18,15"
+								VerticalAlignment="Top" />
+							<!--未知连接 ID: 29-->
+							<Grid
+								x:Name="PanForgeInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 30-->
+								<local:OurImage
+									x:Name="ImgForge"
+									Margin="0,0,7,0"
+									SnapsToDevicePixels="True"
+									Height="18"
+									RenderOptions.BitmapScalingMode="Linear"
+									Source="pack://application:,,,/images/Blocks/Anvil.png" />
+								<!--未知连接 ID: 31-->
+								<TextBlock
+									x:Name="LabForge"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 32-->
+							<Grid
+								x:Name="PanForgeCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Anvil.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 33-->
+									<TextBlock
+										x:Name="LabForgeOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Anvil.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 34-->
+							<local:OurIconButton
+								x:Name="BtnForgeClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 35-->
+							<local:OurIconButton
+								x:Name="BtnForgeRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 36-->
+						<local:OurCard
+							x:Name="CardNeoForge"
+							Title="NeoForge"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<!--未知连接 ID: 37-->
+							<StackPanel
+								Name="PanNeoForge"
+								Margin="20,40,18,15"
+								VerticalAlignment="Top" />
+							<!--未知连接 ID: 38-->
+							<Grid
+								x:Name="PanNeoForgeInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 39-->
+								<local:OurImage
+									x:Name="ImgNeoForge"
+									Margin="0,0,7,0"
+									SnapsToDevicePixels="True"
+									Height="18"
+									RenderOptions.BitmapScalingMode="Linear"
+									Source="pack://application:,,,/images/Blocks/NeoForge.png" />
+								<!--未知连接 ID: 40-->
+								<TextBlock
+									x:Name="LabNeoForge"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 41-->
+							<Grid
+								x:Name="PanNeoForgeCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/NeoForge.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 42-->
+									<TextBlock
+										x:Name="LabNeoForgeOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/NeoForge.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 43-->
+							<local:OurIconButton
+								x:Name="BtnNeoForgeClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 44-->
+							<local:OurIconButton
+								x:Name="BtnNeoForgeRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 45-->
+						<local:OurCard
+							x:Name="CardFabric"
+							Title="Fabric"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<!--未知连接 ID: 46-->
+							<StackPanel
+								Name="PanFabric"
+								Margin="20,40,18,15"
+								VerticalAlignment="Top" />
+							<!--未知连接 ID: 47-->
+							<Grid
+								x:Name="PanFabricInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 48-->
+								<local:OurImage
+									x:Name="ImgFabric"
+									Margin="0,0,7,0"
+									SnapsToDevicePixels="True"
+									Height="18"
+									RenderOptions.BitmapScalingMode="Linear"
+									Source="pack://application:,,,/images/Blocks/Fabric.png" />
+								<!--未知连接 ID: 49-->
+								<TextBlock
+									x:Name="LabFabric"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 50-->
+							<Grid
+								x:Name="PanFabricCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Fabric.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 51-->
+									<TextBlock
+										x:Name="LabFabricOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Fabric.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 52-->
+							<local:OurIconButton
+								x:Name="BtnFabricClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 53-->
+							<local:OurIconButton
+								x:Name="BtnFabricRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 54-->
+						<local:OurCard
+							x:Name="CardFabricApi"
+							Title="Fabric API"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<!--未知连接 ID: 55-->
+							<StackPanel
+								Name="PanFabricApi"
+								Margin="20,40,18,15"
+								VerticalAlignment="Top" />
+							<!--未知连接 ID: 56-->
+							<Grid
+								x:Name="PanFabricApiInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 57-->
+								<local:OurImage
+									x:Name="ImgFabricApi"
+									Margin="0,0,7,0"
+									SnapsToDevicePixels="True"
+									Height="18"
+									RenderOptions.BitmapScalingMode="Linear"
+									Source="pack://application:,,,/images/Blocks/Fabric.png" />
+								<!--未知连接 ID: 58-->
+								<TextBlock
+									x:Name="LabFabricApi"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 59-->
+							<Grid
+								x:Name="PanFabricApiCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Fabric.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 60-->
+									<TextBlock
+										x:Name="LabFabricApiOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Fabric.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 61-->
+							<local:OurIconButton
+								x:Name="BtnFabricApiClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 62-->
+							<local:OurIconButton
+								x:Name="BtnFabricApiRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 63-->
+						<local:OurCard
+							x:Name="CardOptiFine"
+							Title="OptiFine"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<StackPanel
+								Margin="20,40,18,15"
+								VerticalAlignment="Top">
+								<!--未知连接 ID: 64-->
+								<StackPanel
+									Name="PanOptiFine" />
+							</StackPanel>
+							<!--未知连接 ID: 65-->
+							<Grid
+								x:Name="PanOptiFineInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 66-->
+								<local:OurImage
+									x:Name="ImgOptiFine"
+									Margin="0,0,7,0"
+									SnapsToDevicePixels="True"
+									Height="18"
+									RenderOptions.BitmapScalingMode="Linear"
+									Source="pack://application:,,,/images/Blocks/GrassPath.png" />
+								<!--未知连接 ID: 67-->
+								<TextBlock
+									x:Name="LabOptiFine"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 68-->
+							<Grid
+								x:Name="PanOptiFineCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/GrassPath.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 69-->
+									<TextBlock
+										x:Name="LabOptiFineOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/GrassPath.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 70-->
+							<local:OurIconButton
+								x:Name="BtnOptiFineClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 71-->
+							<local:OurIconButton
+								x:Name="BtnOptiFineRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 72-->
+						<local:OurCard
+							x:Name="CardOptiFabric"
+							Title="OptiFabric"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<!--未知连接 ID: 73-->
+							<StackPanel
+								Name="PanOptiFabric"
+								Margin="20,40,18,15"
+								VerticalAlignment="Top" />
+							<!--未知连接 ID: 74-->
+							<Grid
+								x:Name="PanOptiFabricInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 75-->
+								<local:OurImage
+									x:Name="ImgOptiFabric"
+									Margin="0,0,7,0"
+									SnapsToDevicePixels="True"
+									Height="18"
+									RenderOptions.BitmapScalingMode="HighQuality"
+									Source="pack://application:,,,/images/Blocks/OptiFabric.png" />
+								<!--未知连接 ID: 76-->
+								<TextBlock
+									x:Name="LabOptiFabric"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 77-->
+							<Grid
+								x:Name="PanOptiFabricCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/OptiFabric.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 78-->
+									<TextBlock
+										x:Name="LabOptiFabricOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/OptiFabric.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 79-->
+							<local:OurIconButton
+								x:Name="BtnOptiFabricClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 80-->
+							<local:OurIconButton
+								x:Name="BtnOptiFabricRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+						<!--未知连接 ID: 81-->
+						<local:OurCard
+							x:Name="CardLiteLoader"
+							Title="LiteLoader"
+							Height="40"
+							Margin="0,12,0,0"
+							IsSwapped="True"
+							CanSwap="True"
+							SwapLogoRight="True">
+							<!--未知连接 ID: 82-->
+							<StackPanel
+								Name="PanLiteLoader"
+								Margin="20,40,18,15"
+								VerticalAlignment="Top" />
+							<!--未知连接 ID: 83-->
+							<Grid
+								x:Name="PanLiteLoaderInfo"
+								Height="18"
+								Margin="132,11,15,0"
+								VerticalAlignment="Top"
+								Tag="True">
+								<UIElement.RenderTransform>
+									<TranslateTransform />
+								</UIElement.RenderTransform>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<!--未知连接 ID: 84-->
+								<local:OurImage
+									x:Name="ImgLiteLoader"
+									Margin="-1,0,6,0"
+									SnapsToDevicePixels="True"
+									Height="20"
+									RenderOptions.BitmapScalingMode="Linear"
+									Source="pack://application:,,,/images/Blocks/Egg.png" />
+								<!--未知连接 ID: 85-->
+								<TextBlock
+									x:Name="LabLiteLoader"
+									VerticalAlignment="Center"
+									TextTrimming="CharacterEllipsis"
+									Grid.Column="1" />
+							</Grid>
+							<!--未知连接 ID: 86-->
+							<Grid
+								x:Name="PanLiteLoaderCompare"
+								Height="18"
+								Margin="132,11,80,0"
+								VerticalAlignment="Top"
+								Visibility="Collapsed"
+								IsHitTestVisible="False">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition
+										Width="180" />
+									<ColumnDefinition
+										Width="Auto" />
+									<ColumnDefinition
+										Width="1*" />
+								</Grid.ColumnDefinitions>
+								<DockPanel>
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Egg.png"
+										DockPanel.Dock="Left" />
+									<!--未知连接 ID: 87-->
+									<TextBlock
+										x:Name="LabLiteLoaderOld"
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+								<Path
+									Grid.Column="1"
+									Style="{StaticResource ModifyCompareArrow}" />
+								<DockPanel
+									Grid.Column="2">
+									<local:OurImage
+										Style="{StaticResource ModifyCompareIcon}"
+										Source="pack://application:,,,/images/Blocks/Egg.png"
+										DockPanel.Dock="Left" />
+									<TextBlock
+										Style="{StaticResource ModifyCompareText}" />
+								</DockPanel>
+							</Grid>
+							<!--未知连接 ID: 88-->
+							<local:OurIconButton
+								x:Name="BtnLiteLoaderClear"
+								Style="{StaticResource ModifyClearButton}"
+								Theme="Black"
+								LogoScale="0.5"
+								Logo="{StaticResource ModifyClearLogo}" />
+							<!--未知连接 ID: 89-->
+							<local:OurIconButton
+								x:Name="BtnLiteLoaderRestore"
+								Style="{StaticResource ModifyRestoreButton}"
+								Theme="Black"
+								LogoScale="0.55"
+								Logo="{StaticResource ModifyRestoreLogo}" />
+						</local:OurCard>
+					</StackPanel>
+				</Grid>
+			</local:OurScrollViewer>
+			<!--未知连接 ID: 90-->
+			<local:OurExtraTextButton
+				x:Name="BtnStart"
+				Text="开始下载"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Bottom"
+				LogoScale="0.95"
+				Logo="M955 610h-59c-15 0-29 13-29 29v196c0 15-13 29-29 29h-649c-15 0-29-13-29-29v-196c0-15-13-29-29-29h-59c-15 0-29 13-29 29V905c0 43 35 78 78 78h787c43 0 78-35 78-78V640c0-15-13-29-29-29zM492 740c11 11 29 11 41 0l265-265c11-11 11-29 0-41l-41-41c-11-11-29-11-41 0l-110 110c-11 11-33 3-33-13V68C571 53 555 39 541 39h-59c-15 0-29 13-29 29v417c0 17-21 25-33 13l-110-110c-11-11-29-11-41 0L226 433c-11 11-11 29 0 41L492 740z" />
+		</Grid>
+		<!--未知连接 ID: 91-->
+		<local:OurCard
+			x:Name="PanLoad"
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center"
+			Margin="40,0"
+			SnapsToDevicePixels="True"
+			UseAnimation="False">
+			<!--未知连接 ID: 92-->
+			<local:OurLoading
+				x:Name="LoadMinecraft"
+				Text="正在加载"
+				Margin="20,20,20,17"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				ShowProgress="True" />
+			<!--未知连接 ID: 93-->
+			<local:OurLoading
+				x:Name="LoadOptiFine"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+			<!--未知连接 ID: 94-->
+			<local:OurLoading
+				x:Name="LoadForge"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+			<!--未知连接 ID: 95-->
+			<local:OurLoading
+				x:Name="LoadNeoForge"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+			<!--未知连接 ID: 96-->
+			<local:OurLoading
+				x:Name="LoadLiteLoader"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+			<!--未知连接 ID: 97-->
+			<local:OurLoading
+				x:Name="LoadFabric"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+			<!--未知连接 ID: 98-->
+			<local:OurLoading
+				x:Name="LoadFabricApi"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+			<!--未知连接 ID: 99-->
+			<local:OurLoading
+				x:Name="LoadOptiFabric"
+				Visibility="Collapsed"
+				HasAnimation="False" />
+		</local:OurCard>
+	</Grid>
+</local:OurPageRight>
